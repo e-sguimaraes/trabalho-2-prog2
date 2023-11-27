@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "tReceita.h"
 
 typedef enum
 {
@@ -11,10 +12,10 @@ typedef enum
 typedef struct {
     char pacienteNome[100];
     eTipoUso tipoUso;
-    char medicamentoNome[50];
-    char tipoMedicamento[50];
+    char medicamentoNome[MAX_TAM_NOME_MEDICAMENTO];
+    char tipoMedicamento[MAX_TAM_TIPO_MEDICAMENTO];
     int qtd;
-    char instrucoes[300];
+    char instrucoes[MAX_TAM_INSTRUCOES];
     char medicoNome[100];
     char crm[12];
     char data[10];
@@ -50,6 +51,7 @@ void imprimeNaTelaReceita(void *dado) {
 
     tReceita * receita = (tReceita *)dado;
     
+
     printf("RECEITUARIO\n");
     printf("NOME: %s\n\n", receita -> pacienteNome);
     printf("%s\n\n", receita -> tipoUso);
@@ -67,9 +69,10 @@ void imprimeEmArquivoReceita(void *dado, char *path) {
     tReceita * receita = (tReceita *)dado;
 
     char diretorioDoResumo[50];
-    sprintf(diretorioDoResumo, "%s/receita.txt", path);
+    sprintf(diretorioDoResumo, "%s/%s", path, NOME_ARQUIVO_RECEITA);
     arqReceita = fopen(diretorioDoResumo, "w");
 
+    printf("IMPRIMINDO %s\n", NOME_ARQUIVO_RECEITA);
     fprintf(arqReceita, "RECEITUARIO\n");
     fprintf(arqReceita, "NOME: %s\n\n", receita -> pacienteNome);
     fprintf(arqReceita, "%s\n\n", receita -> tipoUso);

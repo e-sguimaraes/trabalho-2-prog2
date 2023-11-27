@@ -13,7 +13,7 @@ tFila *criaFila() {
     tFila * fila = (tFila *) malloc(sizeof(tFila));
 
     fila -> qtdItens = 0;
-    fila -> documentos = NULL;
+    fila -> documentos = (tDocumento **) malloc(sizeof(tDocumento *));
 
 return fila;
 }
@@ -38,7 +38,7 @@ void insereDocumentoFila(tFila *f, void *dado, func_ptr_imprimeNaTela imprimeNaT
     
     f -> qtdItens++;
 
-    f -> documentos = (tDocumento **) realloc(f -> documentos, f -> qtdItens * sizeof(tDocumento *));
+    if(f -> qtdItens != 1) f -> documentos = (tDocumento **) realloc(f -> documentos, f -> qtdItens * sizeof(tDocumento *));
 
     f -> documentos[f -> qtdItens - 1] = criaDocumento(dado, imprimeNaTela, ImprimeEmArquivo, desaloca);
     
@@ -57,7 +57,6 @@ void imprimeFila(tFila *f, char *path) {
 
     for(int i = 0; i < quantidadeDocumentosNaFila(f); i++) {
         printf("---\n");
-        printf("IMPRIMINDO %s"); //NAO SEI SE ONDE TIRAR ESSA STRING E NEM SE ESSE PRINTF DEVERIA ESTAR AQUI
         imprimeNaTelaDocumento(f -> documentos[i]);
         imprimeEmArquivoDocumento(f -> documentos[i], path);
 
