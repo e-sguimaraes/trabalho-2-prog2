@@ -50,7 +50,6 @@ void desalocaReceita(void *dado) {
 void imprimeNaTelaReceita(void *dado) {
 
     tReceita * receita = (tReceita *)dado;
-    
 
     printf("RECEITUARIO\n");
     printf("NOME: %s\n\n", receita -> pacienteNome);

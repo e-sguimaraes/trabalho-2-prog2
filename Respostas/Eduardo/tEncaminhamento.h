@@ -1,12 +1,10 @@
 #ifndef _TENCAMINHAMENTO_H_
 #define _TENCAMINHAMENTO_H_
 
-//MEXER AQUI!!!!
-#define MAX_TAM_NOME_MEDICAMENTO 50
-#define MAX_TAM_TIPO_MEDICAMENTO 50
-#define MAX_TAM_INSTRUCOES 300
-#define NOME_ARQUIVO_RECEITA "receita.txt"
+#define MAX_TAM_ESPECIALIDADE 50
+#define MAX_TAM_MOTIVO 300
 
+#define NOME_ARQUIVO_RECEITA "encaminhamento.txt"
 
 typedef struct tEncaminhamento tEncaminhamento;
 
@@ -14,7 +12,8 @@ typedef struct tEncaminhamento tEncaminhamento;
  * Função que recebe todas as informações pertinentes a um paciente e retorna
  * um ponteiro com o encaminhamento criada.
  */
-tEncaminhamento * criaEncaminhamento(char *nomePaciente, char * cpfPaciente, char * nomeMedico, char * crm, char * data);
+tEncaminhamento * criaEncaminhamento(char *nomePaciente, char * cpfPaciente, char * nomeMedico,
+                                     char * especialidade, char * motivo, char * crm, char * data);
 
 /**
  * Função que recebe o ponteiro genérico (que deve conter um encaminhamento) e o desaloca da memória.
