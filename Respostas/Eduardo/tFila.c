@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "tFila.h"
 
-typedef struct tFila {
+struct tFila {
     int qtdItens;
     tDocumento ** documentos;
 };

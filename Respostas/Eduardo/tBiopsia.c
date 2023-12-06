@@ -2,15 +2,16 @@
 #include <string.h>
 #include <stdio.h>
 #include "tBiopsia.h"
+#include "limites.h"
 
-typedef struct tBiopsia {
-    char * nomePaciente[100];
-    char * cpf[14];
+struct tBiopsia {
+    char * nomePaciente[MAX_NOME];
+    char * cpf[TAM_CPF];
     tLesao ** lesao;
     int qtdLesoes;
-    char * nomeMedico[100];
-    char * crm[12];
-    char * data[10];
+    char * nomeMedico[MAX_NOME];
+    char * crm[TAM_CRM];
+    char * data[TAM_DATA];
 };
 
 

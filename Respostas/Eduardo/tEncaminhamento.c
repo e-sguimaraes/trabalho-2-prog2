@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tEncaminhamento.h"
+#include "limites.h"
 
-typedef struct tEncaminhamento{
-    char * nomePaciente[100];
-    char * cpf[14];
+struct tEncaminhamento{
+    char * nomePaciente[MAX_NOME];
+    char * cpf[TAM_CPF];
     char * especialidade[MAX_TAM_ESPECIALIDADE];
     char * motivo[MAX_TAM_MOTIVO];
-    char * nomeMedico[100];
-    char * crm[12];
-    char * data[10];
+    char * nomeMedico[MAX_NOME];
+    char * crm[TAM_CRM];
+    char * data[TAM_DATA];
 };
 
 

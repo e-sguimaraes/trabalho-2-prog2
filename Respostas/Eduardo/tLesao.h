@@ -15,7 +15,7 @@ typedef struct tLesao tLesao;
  */
 tLesao ** criaLesoes();
 
-
+void adicionaLesao(tLesao ** lesao, int qtdLesoes);
 /**
  * Função que recebe o ponteiro genérico (que deve conter uma biopsia) e o desaloca da memória.
  * Essa função primeiro verifica se o ponteiro é NULL antes de desalocar.

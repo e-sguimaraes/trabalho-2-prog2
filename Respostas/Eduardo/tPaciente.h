@@ -1,32 +1,42 @@
 #ifndef _TPACIENTE_H_
 #define _TPACIENTE_H_
 
+#include "tLesao.h"
+
 typedef struct tPaciente tPaciente;
 
 /**
  * Função que recebe todas as informações pertinentes a um paciente e retorna
  * um ponteiro com o paciente criado.
  */
-tPaciente * criaPaciente(char *nomePaciente, char * cpfPaciente, char * dataNascimento,
+tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * dataNascimento,
                       char * telefone, char * genero);
 
-char * ObtemNomePaciente(tPaciente paciente);
+char * ObtemNomePaciente(tPaciente * paciente);
 
-char * ObtemCPFPaciente(tPaciente paciente);
+char * ObtemCPFPaciente(tPaciente * paciente);
 
-char * ObtemNascimentoPaciente(tPaciente paciente);
+char * ObtemNascimentoPaciente(tPaciente * paciente);
 
-char * ObtemTelefonePaciente(tPaciente paciente);
+char * ObtemTelefonePaciente(tPaciente * paciente);
 
-char * ObtemGeneroPaciente(tPaciente paciente);
+char * ObtemGeneroPaciente(tPaciente * paciente);
 
-int EhDiabeticoPaciente(tPaciente paciente);
+void AlteraDiabetePaciente(tPaciente * paciente, int valor);
 
-int EhFumantePaciente(tPaciente paciente);
+void AlteraFumantePaciente(tPaciente * paciente, int valor);
 
-int TemHistoricoDeCancerPaciente(tPaciente paciente);
+void AlteraHistoricoDeCancerPaciente(tPaciente * paciente, int valor);
 
-int ObtemTipoPelePaciente(tPaciente paciente);
+void AlteraTipoDePelePaciente(tPaciente * paciente, int valor);
+
+int EhDiabeticoPaciente(tPaciente * paciente);
+
+int EhFumantePaciente(tPaciente * paciente);
+
+int TemHistoricoDeCancerPaciente(tPaciente * paciente);
+
+int ObtemTipoPelePaciente(tPaciente * paciente);
 
 /**
  * Função que recebe o ponteiro genérico (que deve conter um paciente) e o desaloca da memória.

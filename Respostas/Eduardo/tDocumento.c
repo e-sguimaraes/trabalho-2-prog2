@@ -1,7 +1,7 @@
 #include "tDocumento.h"
 #include <stdlib.h>
 
-typedef struct tDocumento{
+struct tDocumento{
     void * dado;
     func_ptr_imprimeNaTela imprimeNaTela;
     func_ptr_imprimeEmArquivo imprimeEmArquivo;

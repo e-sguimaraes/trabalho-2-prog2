@@ -2,18 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tReceita.h"
+#include "limites.h"
 
-
-typedef struct tReceita {
-    char pacienteNome[100];
+struct tReceita {
+    char pacienteNome[MAX_NOME];
     eTipoUso tipoUso;
     char medicamentoNome[MAX_TAM_NOME_MEDICAMENTO];
     char tipoMedicamento[MAX_TAM_TIPO_MEDICAMENTO];
     int qtd;
     char instrucoes[MAX_TAM_INSTRUCOES];
-    char medicoNome[100];
-    char crm[12];
-    char data[10];
+    char medicoNome[MAX_NOME];
+    char crm[TAM_CRM];
+    char data[TAM_DATA];
 };
 
 

@@ -2,21 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tPaciente.h"
+#include "limites.h"
 
 typedef struct tPaciente {
-    char * nomePaciente;
-    char * cpf;
-    char * dataNascimento;
-    char * telefone;
-    char * genero;
+    char * nomePaciente[MAX_NOME];
+    char * cpf[TAM_CPF];
+    char * dataNascimento[TAM_DATA];
+    char * telefone[TAM_TEL];
+    char * genero[TAM_GEN];
     int diabetico;
     int fumante;
     int historicoCancer;
     int tipoPele;
+    tLesao ** lesoes;
 };
 
 
-tPaciente * criaPaciente(char *nomePaciente, char * cpfPaciente, char * dataNascimento,
+tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * dataNascimento,
                       char * telefone, char * genero) {
     
     tPaciente * paciente = (tPaciente *) malloc(sizeof(tPaciente));
@@ -59,6 +61,22 @@ char * ObtemGeneroPaciente(tPaciente * paciente) {
 return paciente -> genero;
 }
 
+void AlteraDiabetePaciente(tPaciente * paciente, int valor) {
+    paciente -> diabetico = valor;
+}
+
+void AlteraFumantePaciente(tPaciente * paciente, int valor) {
+    paciente -> fumante = valor;
+}
+
+void AlteraHistoricoDeCancerPaciente(tPaciente * paciente, int valor) {
+    paciente -> historicoCancer = valor;
+}
+
+void AlteraTipoDePelePaciente(tPaciente * paciente, int valor) {
+    paciente -> tipoPele = valor;
+}
+
 
 int EhDiabeticoPaciente(tPaciente * paciente) {
 return paciente -> diabetico;
@@ -99,5 +117,4 @@ void imprimeEmArquivoPaciente(tPaciente * paciente, char *path) {
     arqPaciente = fopen(path, "a");
     fprintf(arqPaciente, "%s (%s)\n", paciente -> nomePaciente, paciente -> cpf);
 
-    
 }
