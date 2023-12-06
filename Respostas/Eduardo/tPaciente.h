@@ -1,13 +1,6 @@
 #ifndef _TPACIENTE_H_
 #define _TPACIENTE_H_
 
-//MEXER AQUI
-#define MAX_TAM_NOME_MEDICAMENTO 50
-#define MAX_TAM_TIPO_MEDICAMENTO 50
-#define MAX_TAM_INSTRUCOES 300
-#define NOME_ARQUIVO_RECEITA "receita.txt"
-
-
 typedef struct tPaciente tPaciente;
 
 /**
@@ -27,27 +20,25 @@ char * ObtemTelefonePaciente(tPaciente paciente);
 
 char * ObtemGeneroPaciente(tPaciente paciente);
 
-char * ObtemGeneroPaciente(tPaciente paciente);
-
 int EhDiabeticoPaciente(tPaciente paciente);
 
 int EhFumantePaciente(tPaciente paciente);
 
 int TemHistoricoDeCancerPaciente(tPaciente paciente);
 
-int PelePaciente(tPaciente paciente);
+int ObtemTipoPelePaciente(tPaciente paciente);
 
 /**
  * Função que recebe o ponteiro genérico (que deve conter um paciente) e o desaloca da memória.
  * Essa função primeiro verifica se o ponteiro é NULL antes de desalocar.
  */
-void desalocaPaciente(void *dado);
+void desalocaPaciente(tPaciente * paciente);
 
 /**
  * Função que recebe um ponteiro genérico (que deve conter um paciente) e imprime os dados na tela
  * de acordo com o especificado na descrição do trabalho.
  */
-void imprimeNaTelaPaciente(void *dado);
+void imprimeNaTelaPaciente(tPaciente * paciente);
 
 /**
  * Função que recebe um ponteiro genérico (que deve conter paciente) e imprime os dados no arquivo
@@ -56,6 +47,6 @@ void imprimeNaTelaPaciente(void *dado);
  * Ex: /home/usuario/Documentos
  * O nome do arquivo e a maneira de escrita é definido dentro da função
  */
-void imprimeEmArquivoPaciente(void *dado, char *path);
+void imprimeEmArquivoPaciente(tPaciente * paciente, char *path);
 
 #endif

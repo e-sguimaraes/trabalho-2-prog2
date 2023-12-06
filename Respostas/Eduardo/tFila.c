@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "tDocumento.h"
+#include "tFila.h"
 
-typedef struct {
+typedef struct tFila {
     int qtdItens;
     tDocumento ** documentos;
-} tFila;
+};
 
 
 tFila *criaFila() {

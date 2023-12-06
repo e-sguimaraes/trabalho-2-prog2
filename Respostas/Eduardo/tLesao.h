@@ -13,20 +13,20 @@ typedef struct tLesao tLesao;
 /**
  * Função que recebe todas as informações de uma lesão e retorna um ponteiro para essa lesão;
  */
-tLesao * criaLesao();
+tLesao ** criaLesoes();
 
 
 /**
  * Função que recebe o ponteiro genérico (que deve conter uma biopsia) e o desaloca da memória.
  * Essa função primeiro verifica se o ponteiro é NULL antes de desalocar.
  */
-void desalocaLesao(void *dado);
+void desalocaLesao(tLesao ** lesoes, int qtdLesoes);
 
 /**
  * Função que recebe um ponteiro genérico (que deve conter uma lesao) e imprime os dados na tela
  * de acordo com o especificado na descrição do trabalho.
  */
-void imprimeNaTelaLesao(void *dado);
+void imprimeNaTelaLesao(tLesao ** lesoes, int qtdLesoes);
 
 /**
  * Função que recebe um ponteiro genérico (que deve conter uma lesao) e imprime os dados no arquivo
@@ -35,6 +35,6 @@ void imprimeNaTelaLesao(void *dado);
  * Ex: /home/usuario/Documentos
  * O nome do arquivo e a maneira de escrita é definido dentro da função
  */
-void imprimeEmArquivoLesao(void *dado, char *path);
+void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, char *path);
 
 #endif

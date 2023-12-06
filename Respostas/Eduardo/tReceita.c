@@ -3,13 +3,8 @@
 #include <string.h>
 #include "tReceita.h"
 
-typedef enum
-{
-    ORAL,
-    TOPICO
-} eTipoUso;
 
-typedef struct {
+typedef struct tReceita {
     char pacienteNome[100];
     eTipoUso tipoUso;
     char medicamentoNome[MAX_TAM_NOME_MEDICAMENTO];
@@ -19,7 +14,7 @@ typedef struct {
     char medicoNome[100];
     char crm[12];
     char data[10];
-} tReceita;
+};
 
 
 tReceita *criaReceita(char *nomePaciente, eTipoUso tipoUso, char *nomeMedicamento,
@@ -53,7 +48,14 @@ void imprimeNaTelaReceita(void *dado) {
 
     printf("RECEITUARIO\n");
     printf("NOME: %s\n\n", receita -> pacienteNome);
-    printf("%s\n\n", receita -> tipoUso);
+
+    if(receita -> tipoUso == ORAL) {
+        printf("USO ORAL\n\n");
+    }
+    else {
+        printf("USO TOPICO\n\n");
+    }
+
     printf("%s\n%d %s\n\n", receita -> medicamentoNome, receita -> qtd, receita -> tipoMedicamento);
     printf("%s\n\n", receita -> instrucoes);
     printf("%s %s\n", receita -> medicoNome, receita -> crm);
@@ -67,17 +69,24 @@ void imprimeEmArquivoReceita(void *dado, char *path) {
     FILE * arqReceita = NULL;
     tReceita * receita = (tReceita *)dado;
 
-    char diretorioDoResumo[50];
-    sprintf(diretorioDoResumo, "%s/%s", path, NOME_ARQUIVO_RECEITA);
-    arqReceita = fopen(diretorioDoResumo, "w");
+    char diretorioDaReceita[50];
+    sprintf(diretorioDaReceita, "%s/%s", path, NOME_ARQUIVO_RECEITA);
+    arqReceita = fopen(diretorioDaReceita, "a");
 
     printf("IMPRIMINDO %s\n", NOME_ARQUIVO_RECEITA);
     fprintf(arqReceita, "RECEITUARIO\n");
     fprintf(arqReceita, "NOME: %s\n\n", receita -> pacienteNome);
-    fprintf(arqReceita, "%s\n\n", receita -> tipoUso);
+
+    if(receita -> tipoUso == ORAL) {
+        fprintf(arqReceita, "USO ORAL\n\n");
+    }
+    else {
+        fprintf(arqReceita, "USO TOPICO\n\n");
+    }
+
     fprintf(arqReceita, "%s\n%d %s\n\n", receita -> medicamentoNome, receita -> qtd, receita -> tipoMedicamento);
     fprintf(arqReceita, "%s\n\n", receita -> instrucoes);
-    fprintf(arqReceita, "%s %s\n", receita -> medicoNome, receita -> crm);
+    fprintf(arqReceita, "%s (%s)\n", receita -> medicoNome, receita -> crm);
     fprintf(arqReceita, "%s\n", receita -> data);
 
     fclose(arqReceita);

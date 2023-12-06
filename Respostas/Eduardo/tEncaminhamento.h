@@ -4,7 +4,7 @@
 #define MAX_TAM_ESPECIALIDADE 50
 #define MAX_TAM_MOTIVO 300
 
-#define NOME_ARQUIVO_RECEITA "encaminhamento.txt"
+#define NOME_ARQUIVO_ENCAMINHAMENTO "encaminhamento.txt"
 
 typedef struct tEncaminhamento tEncaminhamento;
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "tEncaminhamento.h"
 
-typedef struct {
+typedef struct tEncaminhamento{
     char * nomePaciente[100];
     char * cpf[14];
     char * especialidade[MAX_TAM_ESPECIALIDADE];
@@ -11,7 +11,7 @@ typedef struct {
     char * nomeMedico[100];
     char * crm[12];
     char * data[10];
-} tEncaminhamento;
+};
 
 
 tEncaminhamento * criaEncaminhamento(char *nomePaciente, char * cpfPaciente, char * especialidade, 
@@ -36,17 +36,38 @@ void desalocaEncaminhamento(void *dado) {
     free((tEncaminhamento *)dado);
 }
 
-/**
- * Função que recebe um ponteiro genérico (que deve conter um encaminhamento) e imprime os dados na tela
- * de acordo com o especificado na descrição do trabalho.
- */
-void imprimeNaTelaEncaminhamento(void *dado);
 
-/**
- * Função que recebe um ponteiro genérico (que deve conter um encaminhamento) e imprime os dados no arquivo
- * específico de acordo com a descrição do trabalho.
- * Essa função também recebe o path da pasta onde o arquivo deve ser criado ou editado.
- * Ex: /home/usuario/Documentos
- * O nome do arquivo e a maneira de escrita é definido dentro da função
- */
-void imprimeEmArquivoEncaminhamento(void *dado, char *path);
+void imprimeNaTelaEncaminhamento(void *dado) {
+
+    tEncaminhamento * encaminhamento = (tEncaminhamento *)dado;
+
+    printf("PACIENTE: %s\n", encaminhamento -> nomePaciente);
+    printf("CPF: %s\n\n", encaminhamento -> cpf);
+    printf("ESPECIALIDADE: %s\n\n", encaminhamento -> especialidade);
+    printf("MOTIVO: %s\n\n", encaminhamento -> motivo);
+    printf("%s (%s)\n", encaminhamento -> nomeMedico, encaminhamento -> crm);
+    printf("%s\n", encaminhamento -> data);
+
+}
+
+
+void imprimeEmArquivoEncaminhamento(void *dado, char *path) {
+
+    FILE * arqEncaminhamento = NULL;
+    tEncaminhamento * encaminhamento = (tEncaminhamento *)dado;
+
+    char diretorioDoEncaminhamento[50];
+    sprintf(diretorioDoEncaminhamento, "%s/%s", path, NOME_ARQUIVO_ENCAMINHAMENTO);
+    arqEncaminhamento = fopen(diretorioDoEncaminhamento, "a");
+
+    printf("IMPRIMINDO %s\n", NOME_ARQUIVO_ENCAMINHAMENTO);
+
+    fprintf(arqEncaminhamento, "PACIENTE: %s\n", encaminhamento -> nomePaciente);
+    fprintf(arqEncaminhamento, "CPF: %s\n\n", encaminhamento -> cpf);
+    fprintf(arqEncaminhamento, "ESPECIALIDADE: %s\n\n", encaminhamento -> especialidade);
+    fprintf(arqEncaminhamento, "MOTIVO: %s\n\n", encaminhamento -> motivo);
+    fprintf(arqEncaminhamento, "%s (%s)\n", encaminhamento -> nomeMedico, encaminhamento -> crm);
+    fprintf(arqEncaminhamento, "%s\n", encaminhamento -> data);
+
+    fclose(arqEncaminhamento);
+}

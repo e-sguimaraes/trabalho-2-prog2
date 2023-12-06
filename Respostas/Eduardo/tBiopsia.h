@@ -3,11 +3,10 @@
 
 #include "tLesao.h"
 
-//MEXER AQUI!!!!
 #define MAX_TAM_NOME_MEDICAMENTO 50
 #define MAX_TAM_TIPO_MEDICAMENTO 50
 #define MAX_TAM_INSTRUCOES 300
-#define NOME_ARQUIVO_RECEITA "receita.txt"
+#define NOME_ARQUIVO_BIOPSIA "biopsia.txt"
 
 
 typedef struct tBiopsia tBiopsia;
@@ -31,7 +30,7 @@ void desalocaBiopsia(void *dado);
  * Função que recebe um ponteiro genérico (que deve conter uma biopsia) e imprime os dados na tela
  * de acordo com o especificado na descrição do trabalho.
  */
-void imprimeNaTelaReceita(void *dado);
+void imprimeNaTelaBiopsia(void *dado);
 
 /**
  * Função que recebe um ponteiro genérico (que deve conter uma biopsia) e imprime os dados no arquivo
