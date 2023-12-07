@@ -18,6 +18,11 @@ struct tSistema {
 
 tSistema * criaSistema() {
 
+    tSistema * sistema = (tSistema *) malloc(sizeof(tSistema));
+    
+    sistema -> usuarios = (tUsuario **) malloc(sizeof(tUsuario *));
+
+    adicionaUsuarioSistema(sistema, 2); 
 
 }
 
@@ -42,48 +47,48 @@ void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
         case 1:
             printf("#################### CADASTRO MEDICO #######################\n");
             printf("NOME COMPLETO: ");
-            scanf("%[^\n]s", nomeUsuario);
+            scanf("%[^\n]%*c", nomeUsuario);
             printf("CPF: ");
-            scanf("%s", cpf);
+            scanf("%s%*c", cpf);
             printf("DATA DE NASCIMENTO: ");
-            scanf("%s", dataNascimento);
+            scanf("%s%*c", dataNascimento);
             printf("TELEFONE: ");
-            scanf("%s", telefone);
+            scanf("%s%*c", telefone);
             printf("GENERO: ");
-            scanf("%s", genero);
+            scanf("%s%*c", genero);
             printf("CRM: ");
-            scanf("%s", crm);
+            scanf("%s%*c", crm);
             printf("NOME DE USUARIO: ");
-            scanf("%s", nomeUser);
+            scanf("%s%*c", nomeUser);
             printf("SENHA: ");
-            scanf("%s", senhaUser);
+            scanf("%s%*c", senhaUser);
 
             sistema -> usuarios[(sistema -> qtdUsuarios) - 1] = cadastraUsuario(nomeUsuario, cpf, dataNascimento, telefone, 
                                                                                 genero, crm, nomeUser, senhaUser, nivelUser);
+
             break;
 
         case 2:
             printf("#################### CADASTRO SECRETARIO #######################\n");
             printf("NOME COMPLETO: ");
-            scanf("%[^\n]s", nomeUsuario);
+            scanf("%[^\n]%*c", nomeUsuario);
             printf("CPF: ");
-            scanf("%s", cpf);
+            scanf("%s%*c", cpf);
             printf("DATA DE NASCIMENTO: ");
-            scanf("%s", dataNascimento);
+            scanf("%s%*c", dataNascimento);
             printf("TELEFONE: ");
-            scanf("%s", telefone);
+            scanf("%s%*c", telefone);
             printf("GENERO: ");
-            scanf("%s", genero);
+            scanf("%s%*c", genero);
             printf("NOME DE USUARIO: ");
-            scanf("%s", nomeUser);
+            scanf("%s%*c", nomeUser);
             printf("SENHA: ");
-            scanf("%s", senhaUser);
+            scanf("%s%*c", senhaUser);
             printf("NIVEL DE ACESSO: ");
-            scanf("%s", nivelAcesso);
+            scanf("%s%*c", nivelAcesso);
             crm[0] = '\0';
 
-            if(nivelAcesso == "ADMIN") nivelUser = 3;
-            //NÃO SEI SE ISSO FUNCIONA;
+            if(nivelAcesso[0] == 'A') nivelUser = 3;
 
             sistema -> usuarios[(sistema -> qtdUsuarios) - 1] = cadastraUsuario(nomeUsuario, cpf, dataNascimento, telefone, 
                                                                                 genero, crm, nomeUser, senhaUser, nivelUser);
@@ -108,15 +113,15 @@ void adicionaPaciente(tSistema * sistema) {
 
     printf("#################### CADASTRO PACIENTE #######################\n");
     printf("NOME COMPLETO: ");
-    scanf("%[^\n]s", nomePaciente);
+    scanf("%[^\n]%*c", nomePaciente);
     printf("CPF: ");
-    scanf("%s", cpf);
+    scanf("%s%*c", cpf);
     printf("DATA DE NASCIMENTO: ");
-    scanf("%s", dataNascimento);
+    scanf("%s%*c", dataNascimento);
     printf("TELEFONE: ");
-    scanf("%s", telefone);
+    scanf("%s%*c", telefone);
     printf("GENERO: ");
-    scanf("%s", genero);
+    scanf("%s%*c", genero);
 
 }
 
@@ -127,7 +132,7 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
 
     char * cpfConsultado[TAM_CPF];
     int cpfEncontrado = 0;
-    scanf("%s", cpfConsultado);
+    scanf("%s%*c", cpfConsultado);
     
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         if(strcmp(cpfConsultado, sistema -> pacientes[i])) {
@@ -145,22 +150,47 @@ void buscaPacienteSistema(tSistema * sistema) {
 
     printf("#################### BUSCAR PACIENTES #######################\n");
     printf("NOME DO PACIENTE: ");
-    scanf("%[^\n]s", pacienteProcurado);
+    scanf("%[^\n]%*c", pacienteProcurado);
     printf("############################################################\n");
 
     printf("#################### BUSCAR PACIENTES #######################\n");
     printf("PACIENTES ENCONTRADOS:\n");
 
     int pacienteEncontrado = 0;
+
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         if(strcmp(pacienteProcurado, ObtemNomePaciente(sistema -> pacientes[i]))) {
-            printf("- %s (%s)\n", ObtemNomePaciente(sistema -> pacientes[i]), ObtemCPFPaciente(sistema -> pacientes[i]));
             pacienteEncontrado = 1;
+            break;
         }
     }
 
     if(pacienteEncontrado) {
-        //PAREI AQUI;
+        printf("#################### BUSCAR PACIENTES #######################\n");
+        printf("PACIENTES ENCONTRADOS: \n");
+
+        for(int i = 0; i < sistema -> qtdPacientes; i++) {
+            if(strcmp(pacienteProcurado, ObtemNomePaciente(sistema -> pacientes[i]))) {
+                printf("- %s (%s)\n", ObtemNomePaciente(sistema -> pacientes[i]), ObtemCPFPaciente(sistema -> pacientes[i]));
+            }
+        }
+
+        printf("SELECIONE UMA OPÇÃO:\n");
+        printf("    (1) ENVIAR LISTA PARA IMPRESSAO\n");
+        printf("    (2) RETORNAR AO MENU PRINCIPAL\n");
+        printf("############################################################\n");
+
+        int opcao;
+
+        scanf("%d", &opcao);
+        if(opcao == 1) {
+
+            //ENVIAR PARA A LISTA DE IMPRESSÃO!!!
+
+            printf("#################### BUSCAR PACIENTES #######################\n");
+            printf("LISTA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU PRINCIPAL\n");
+            printf("############################################################\n");
+        }
     }
     else {
         printf("#################### BUSCAR PACIENTES #######################\n");

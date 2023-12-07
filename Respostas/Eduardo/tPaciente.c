@@ -125,17 +125,17 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
     int tipoPele;
 
     printf("DATA DA CONSULTA: ");
-    scanf("%s", dataConsulta);
+    scanf("%s%*c", dataConsulta);
     printf("POSSUI DIABETES: ");
-    scanf("%d", diabetes);
+    scanf("%d%*c", diabetes);
     printf("FUMANTE: ");
-    scanf("%d", fumante);
+    scanf("%d%*c", fumante);
     printf("ALEGIA A MEDICAMENTO: ");
-    scanf("%d", alergia);
+    scanf("%d%*c", alergia);
     printf("HISTORICO DE CANCER: ");
-    scanf("%d", historicoDeCancer);
+    scanf("%d%*c", historicoDeCancer);
     printf("TIPO DE PELE: ");
-    scanf("%d", tipoPele);
+    scanf("%d%*c", tipoPele);
 
     AlteraDiabetePaciente(paciente, diabetes);
     AlteraFumantePaciente(paciente, diabetes);
@@ -155,7 +155,7 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
         printf("(5) ENCERRAR CONSULTA\n");
         printf("############################################################\n");
 
-        scanf("%d", &opcao);
+        scanf("%d%*c", &opcao);
 
         switch (opcao) {
             case 1:
@@ -167,7 +167,7 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
 
             case 2:
 
-                eTipoUso tipoUso;
+                char * tipoUso[10];
                 char * nomeMedicamento[MAX_TAM_NOME_MEDICAMENTO];
                 char * tipoMedicamento[MAX_TAM_TIPO_MEDICAMENTO];
                 int * qtdMedicamento;
@@ -175,19 +175,21 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
 
                 printf("RECEITA MEDICA:\n");
                 printf("TIPO DE USO: ");
-                scanf("%s", &tipoUso);
-                //PODE ISSO???;
+                scanf("%s%*c", tipoUso);
                 printf("NOME DO MEDICAMENTO: ");
-                scanf("%s", nomeMedicamento);
+                scanf("%s%*c", nomeMedicamento);
                 printf("TIPO DE MEDICAMENTO: ");
-                scanf("%s", tipoMedicamento);
+                scanf("%s%*c", tipoMedicamento);
                 printf("QUANTIDADE: ");
-                scanf("%d", &qtdMedicamento);
+                scanf("%d%*c", &qtdMedicamento);
                 printf("INSTRUÇÕES DE USO: ");
-                scanf("%[^\n]s", instrucoes);
+                scanf("%[^\n]%*c", instrucoes);
+
+                int tipoUsoInt;
+                if(tipoUso[0] == 'O') tipoUsoInt = 0;
 
                 //ISSO TEM QUE SER REVISTO PARA O CASO DE CONSULTA REALIZADA POR SECRETÁRIO;
-                criaReceita(paciente -> nomePaciente, tipoUso, nomeMedicamento, tipoMedicamento, instrucoes, 
+                criaReceita(paciente -> nomePaciente, tipoUsoInt, nomeMedicamento, tipoMedicamento, instrucoes, 
                             qtdMedicamento, ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), dataConsulta); 
 
                 printf("RECEITA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
@@ -229,9 +231,9 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
                 printf("#################### CONSULTA MEDICA #######################\n");
                 printf("ENCAMINHAMENTO:\n");
                 printf("ESPECIALIDADE ENCAMINHADA: ");
-                scanf("%[^\n]s", especialidade);
+                scanf("%[^\n]%*c", especialidade);
                 printf("MOTIVO: ");
-                scanf("%[^\n]s", motivo);
+                scanf("%[^\n]%*c", motivo);
 
                 criaEncaminhamento(paciente -> nomePaciente, paciente -> cpf, ObtemNomeUsuario(usuario), 
                                    especialidade, motivo, ObtemCRMUsuario(usuario), dataConsulta);
