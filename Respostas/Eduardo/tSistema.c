@@ -13,6 +13,7 @@ struct tSistema {
     tFila * fila;
     int qtdUsuarios;
     int qtdPacientes;
+    int qtdAtendidos;
 };
 
 
@@ -199,8 +200,22 @@ void buscaPacienteSistema(tSistema * sistema) {
     }
 }
 
-void relatorioGeralSistema(tSistema * sistema);
+void relatorioGeralSistema(tSistema * sistema) {
+
+}
 
 void executaFilaDeImpressao(tSistema * sistema);
 
 void finalizaSistema(tSistema * sistema);
+
+int obtemAtendidosSistema(tSistema * sistema) {
+return sistema -> qtdAtendidos;
+}
+
+int obtemQtdPacientes(tSistema * sistema) {
+return sistema -> qtdPacientes;
+}
+
+tPaciente * obtemPaciente(tSistema * sistema, int indice) {
+return sistema -> pacientes[indice];
+}

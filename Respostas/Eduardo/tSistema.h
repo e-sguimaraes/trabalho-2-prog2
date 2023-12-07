@@ -23,4 +23,8 @@ void executaFilaDeImpressao(tSistema * sistema);
 
 void finalizaSistema(tSistema * sistema);
 
+int obtemAtendidos(tSistema * sistema);
+
+int obtemQtdPacientes(tSistema * sistema);
+
 #endif
