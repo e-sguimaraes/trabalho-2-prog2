@@ -26,6 +26,8 @@ void AlteraDiabetePaciente(tPaciente * paciente, int valor);
 
 void AlteraFumantePaciente(tPaciente * paciente, int valor);
 
+void AlteraAlergiaMedicamento(tPaciente * paciente, int valor);
+
 void AlteraHistoricoDeCancerPaciente(tPaciente * paciente, int valor);
 
 void AlteraTipoDePelePaciente(tPaciente * paciente, int valor);
@@ -37,6 +39,8 @@ int EhFumantePaciente(tPaciente * paciente);
 int TemHistoricoDeCancerPaciente(tPaciente * paciente);
 
 int ObtemTipoPelePaciente(tPaciente * paciente);
+
+void consultaPaciente(tPaciente * paciente, tUsuario * usuario);
 
 /**
  * Função que recebe o ponteiro genérico (que deve conter um paciente) e o desaloca da memória.

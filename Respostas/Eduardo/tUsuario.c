@@ -2,8 +2,6 @@
 #include "tUsuario.h"
 #include "limites.h"
 
-#define MAX_USER 20
-
 struct tUsuario {
     char * nomeUsuario[MAX_NOME];
     char * cpf[TAM_CPF];

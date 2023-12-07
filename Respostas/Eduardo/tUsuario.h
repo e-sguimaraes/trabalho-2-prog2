@@ -1,6 +1,8 @@
 #ifndef _TUSUARIO_H_
 #define _TUSUARIO_H_
 
+#define MAX_USER 20
+
 typedef struct tUsuario tUsuario;
 
 /**

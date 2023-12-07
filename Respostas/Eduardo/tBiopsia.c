@@ -22,8 +22,24 @@ tBiopsia * criaBiopsia(char *nomePaciente, char * cpfPaciente, tLesao ** lesao,
 
     strcpy(biopsia -> nomePaciente, nomePaciente);
     strcpy(biopsia -> cpf, cpfPaciente);
-    biopsia -> lesao = lesao;
-    biopsia -> qtdLesoes = qtdLesoes;
+
+    int qtdPrecisaCirurgia = 0;
+    for(int i = 0; i < qtdLesoes; i++) {
+        if(NecessitaCirurgiaLesao(lesao[i])) qtdPrecisaCirurgia++;
+    }
+
+    biopsia -> lesao = (tLesao **) malloc(qtdPrecisaCirurgia * sizeof(tLesao *));
+
+    qtdPrecisaCirurgia = 0;
+    for(int i = 0; i < qtdLesoes; i++) {
+        if(NecessitaCirurgiaLesao(lesao[i])) {
+            biopsia -> lesao[qtdPrecisaCirurgia] = criaLesao();
+            biopsia -> lesao[qtdPrecisaCirurgia] = lesao[i];
+            qtdPrecisaCirurgia++;
+        }
+    }
+
+    biopsia -> qtdLesoes = qtdPrecisaCirurgia;
     strcpy(biopsia -> nomeMedico, nomeMedico);
     strcpy(biopsia -> crm, crm);
     strcpy(biopsia -> data, data);

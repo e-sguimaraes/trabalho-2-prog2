@@ -17,11 +17,9 @@ struct tLesao {
 };
 
 
-tLesao ** criaLesoes() {
+tLesao * criaLesao() {
 
-    tLesao ** lesao = (tLesao **) malloc(sizeof(tLesao *));
-
-    lesao[0] = (tLesao *) malloc(sizeof(tLesao));
+    tLesao * lesao = (tLesao *) malloc(sizeof(tLesao));
 
 return lesao;
 }
@@ -29,16 +27,28 @@ return lesao;
 void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
 
     tLesao * lesao = (tLesao *) malloc(sizeof(tLesao));
-    scanf("%s", &lesao -> rotulo);
+
+    lesao -> rotulo; //O QUE?
+
+    printf("#################### CONSULTA MEDICA #######################\n");
+    printf("CADASTRO DE LESAO:\n");
+    printf("DIAGNOSTICO CLINICO: ");
     scanf("%s", &lesao -> diagnostico);
+    printf("REGIAO DO CORPO: ");
     scanf("%s", &lesao -> regiao);
+    printf("TAMANHO: ");
     scanf("%d", &lesao -> tamanho);
+    printf("ENVIO PARA CIRURGIA: ");
     scanf("%d", &lesao -> necessitaCirurgia);
+    printf("ENVIO PARA CRIOTERAPIA: ");
     scanf("%d", &lesao -> necessitaCrioterapia);
 
     lesoes = (tLesao **) realloc(lesoes, qtdLesoes * sizeof(tLesao *));
     lesoes[qtdLesoes - 1] = (tLesao *) malloc(sizeof(tLesao));
     lesoes[qtdLesoes - 1] = lesao;
+
+    printf("LESAO REGISTRADA COM SUCESSO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
+    printf("############################################################");
 
 }
 
@@ -55,8 +65,9 @@ void desalocaLesao(tLesao ** lesoes, int qtdLesoes) {
 
 void imprimeNaTelaLesao(tLesao ** lesoes, int qtdLesoes) {
     
+    //CONFERIR SE TODAS AS LESOES QUE SÃO PRINTADAS SEGUEM O MODELO DE CIRURGIA;
     for(int i = 0; i < qtdLesoes; i++) {
-        printf("%s - %s - %s - %dMM\n\n", lesoes[i] -> rotulo, lesoes[i] -> diagnostico, lesoes[i] -> regiao, lesoes[i] -> tamanho);
+        if(NecessitaCirurgiaLesao(lesoes[i])) printf("%s - %s - %s - %dMM\n\n", lesoes[i] -> rotulo, lesoes[i] -> diagnostico, lesoes[i] -> regiao, lesoes[i] -> tamanho);
     }
 
 }
