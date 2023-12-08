@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "tBiopsia.h"
-#include "limites.h"
 
 struct tBiopsia {
     char * nomePaciente[MAX_NOME];

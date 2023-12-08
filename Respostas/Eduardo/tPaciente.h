@@ -1,16 +1,21 @@
 #ifndef _TPACIENTE_H_
 #define _TPACIENTE_H_
 
+#define MAX_NOME 100
+#define TAM_CRM 12
+#define TAM_DATA 10
+#define TAM_CPF 14
+#define TAM_TEL 14
+#define TAM_GEN 9
+#define MAX_TAM_ESPECIALIDADE 50
+#define MAX_TAM_MOTIVO 300
+
 #include "tLesao.h"
 
 typedef struct tPaciente tPaciente;
 
-/**
- * Função que recebe todas as informações pertinentes a um paciente e retorna
- * um ponteiro com o paciente criado.
- */
 tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * dataNascimento,
-                      char * telefone, char * genero);
+                      char * telefone, char * genero, int idade);
 
 char * ObtemNomePaciente(tPaciente * paciente);
 
@@ -21,6 +26,8 @@ char * ObtemNascimentoPaciente(tPaciente * paciente);
 char * ObtemTelefonePaciente(tPaciente * paciente);
 
 char * ObtemGeneroPaciente(tPaciente * paciente);
+
+int ObtemIdadePaciente(tPaciente * paciente);
 
 void AlteraDiabetePaciente(tPaciente * paciente, int valor);
 
@@ -46,29 +53,16 @@ int ObtemQtdLesoesCirurgia(tPaciente * paciente);
 
 int ObtemQtdLesoesCrioterapia(tPaciente * paciente);
 
+tLesao ** ObtemLesoesPaciente(tPaciente * paciente);
+
 int ObtemTamanhoLesaoPaciente(tPaciente * paciente, int indice);
 
-void consultaPaciente(tPaciente * paciente, char * nomeUsuario, char * crm);
+void adicionaLesaoPaciente(tPaciente * paciente);
 
-/**
- * Função que recebe o ponteiro genérico (que deve conter um paciente) e o desaloca da memória.
- * Essa função primeiro verifica se o ponteiro é NULL antes de desalocar.
- */
 void desalocaPaciente(tPaciente * paciente);
 
-/**
- * Função que recebe um ponteiro genérico (que deve conter um paciente) e imprime os dados na tela
- * de acordo com o especificado na descrição do trabalho.
- */
 void imprimeNaTelaPaciente(tPaciente * paciente);
 
-/**
- * Função que recebe um ponteiro genérico (que deve conter paciente) e imprime os dados no arquivo
- * específico de acordo com a descrição do trabalho.
- * Essa função também recebe o path da pasta onde o arquivo deve ser criado ou editado.
- * Ex: /home/usuario/Documentos
- * O nome do arquivo e a maneira de escrita é definido dentro da função
- */
 void imprimeEmArquivoPaciente(tPaciente * paciente, char *path);
 
 #endif

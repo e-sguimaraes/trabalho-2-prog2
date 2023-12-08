@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include "tUsuario.h"
-#include "limites.h"
 
 struct tUsuario {
     char * nomeUsuario[MAX_NOME];

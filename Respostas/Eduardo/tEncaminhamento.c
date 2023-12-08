@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tEncaminhamento.h"
-#include "limites.h"
 
 struct tEncaminhamento{
     char * nomePaciente[MAX_NOME];

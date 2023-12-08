@@ -1,9 +1,6 @@
 #ifndef _TRELATORIO_H_
 #define _TRELATORIO_H_
 
-#include "tLesao.h"
-#include "tSistema.h"
-
 #define NOME_ARQUIVO_RELATORIO "relatorio.txt"
 
 typedef struct tRelatorio tRelatorio;

@@ -46,15 +46,7 @@ void imprimeNaTelaRelatorio(void *dado) {
     printf("NUMERO TOTAL DE CIRURGIAS: %d\n", relatorio -> cirurgiaLesoes);
     printf("NUMERO TOTAL DE CRIOTERAPIA: %d\n", relatorio -> crioterapiaLesoes);
 
-    printf("SELECIONE UMA OPÇÃO:\n");
-    printf("\t(1) ENVIAR PARA IMPRESSAO\n");
-    printf("\t(2) RETORNAR AO MENU PRINCIPAL\n");
     printf("############################################################\n");
-
-    int opcao;
-    scanf("%d", &opcao);
-
-    if(opcao == 1) {} //MANDA PRA FILA DE IMPRESSÃO!!!
 
 }
 
@@ -67,8 +59,6 @@ void imprimeEmArquivoRelatorio(void *dado, char *path) {
     sprintf(diretorioDoRelatorio, "%s/%s", path, NOME_ARQUIVO_RELATORIO);
     arqRelatorio = fopen(diretorioDoRelatorio, "a");
 
-    fprintf(arqRelatorio, "#################### RELATORIO GERAL #######################\n");
-
     fprintf(arqRelatorio, "NUMERO TOTAL DE PACIENTES ATENDIDOS: %d\n");
     fprintf(arqRelatorio, "IDADE MEDIA: %d\n", relatorio -> idadeMedia);
     fprintf(arqRelatorio, "DISTRIBUICAO POR GENERO:\n");
@@ -79,8 +69,6 @@ void imprimeEmArquivoRelatorio(void *dado, char *path) {
     fprintf(arqRelatorio, "NUMERO TOTAL DE LESOES: %d\n", relatorio -> nLesoes);
     fprintf(arqRelatorio, "NUMERO TOTAL DE CIRURGIAS: %d\n", relatorio -> cirurgiaLesoes);
     fprintf(arqRelatorio, "NUMERO TOTAL DE CRIOTERAPIA: %d\n", relatorio -> crioterapiaLesoes);
-
-    fprintf(arqRelatorio, "############################################################\n");
 
     fclose(arqRelatorio);
 

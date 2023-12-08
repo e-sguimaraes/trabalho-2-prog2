@@ -50,6 +50,8 @@ void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
     printf("LESAO REGISTRADA COM SUCESSO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
     printf("############################################################");
 
+    scanf("%*c");
+
 }
 
 int NecessitaCirurgiaLesao(tLesao * lesao) {
@@ -91,7 +93,8 @@ void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, char *path) {
 
     arqLesao = fopen(path, "a");
     for(int i = 0; i < qtdLesoes; i++) {
-        fprintf(arqLesao, "%s - %s - %s - %dMM\n\n", lesoes[i] -> rotulo, lesoes[i] -> diagnostico, lesoes[i] -> regiao, lesoes[i] -> tamanho);
+        if(NecessitaCirurgiaLesao(lesoes[i])) fprintf(arqLesao, "%s - %s - %s - %dMM\n\n", lesoes[i] -> rotulo, 
+                                                      lesoes[i] -> diagnostico, lesoes[i] -> regiao, lesoes[i] -> tamanho);
     }
 
 }
