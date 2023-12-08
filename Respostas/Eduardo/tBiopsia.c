@@ -4,13 +4,13 @@
 #include "tBiopsia.h"
 
 struct tBiopsia {
-    char * nomePaciente[MAX_NOME];
-    char * cpf[TAM_CPF];
+    char nomePaciente[MAX_NOME];
+    char cpf[TAM_CPF];
     tLesao ** lesao;
     int qtdLesoes;
-    char * nomeMedico[MAX_NOME];
-    char * crm[TAM_CRM];
-    char * data[TAM_DATA];
+    char nomeMedico[MAX_NOME];
+    char crm[TAM_CRM];
+    char data[TAM_DATA];
 };
 
 

@@ -6,7 +6,7 @@
 struct tListaBusca {
     tPaciente ** pacientes;
     int qtdPacientes;
-    char * nomeProcurado[100];
+    char nomeProcurado[100];
 };
 
 tListaBusca * criaListaBusca(tPaciente ** pacientes, int qtdPacientes, char * nomeProcurado) {

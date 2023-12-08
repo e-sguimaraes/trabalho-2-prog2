@@ -1,15 +1,16 @@
 #include <stdlib.h>
+#include <string.h>
 #include "tUsuario.h"
 
 struct tUsuario {
-    char * nomeUsuario[MAX_NOME];
-    char * cpf[TAM_CPF];
-    char * dataNascimento[TAM_DATA];
-    char * telefone[TAM_TEL];
-    char * genero[TAM_GEN];
-    char * crm[TAM_CRM];
-    char * nomeUser[MAX_USER];
-    char * senhaUser[MAX_USER];
+    char nomeUsuario[MAX_NOME];
+    char cpf[TAM_CPF];
+    char dataNascimento[TAM_DATA];
+    char telefone[TAM_TEL];
+    char genero[TAM_GEN];
+    char crm[TAM_CRM];
+    char nomeUser[MAX_USER];
+    char senhaUser[MAX_USER];
     int nivelUser;
 };
 

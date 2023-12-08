@@ -35,7 +35,7 @@ void imprimeNaTelaRelatorio(void *dado) {
 
     printf("#################### RELATORIO GERAL #######################\n");
 
-    printf("NUMERO TOTAL DE PACIENTES ATENDIDOS: %d\n");
+    printf("NUMERO TOTAL DE PACIENTES ATENDIDOS: %d\n", relatorio -> totalAtendidos);
     printf("IDADE MEDIA: %d\n", relatorio -> idadeMedia);
     printf("DISTRIBUICAO POR GENERO:\n");
     printf("- FEMININO: %d\n", relatorio -> f);
@@ -59,7 +59,7 @@ void imprimeEmArquivoRelatorio(void *dado, char *path) {
     sprintf(diretorioDoRelatorio, "%s/%s", path, NOME_ARQUIVO_RELATORIO);
     arqRelatorio = fopen(diretorioDoRelatorio, "a");
 
-    fprintf(arqRelatorio, "NUMERO TOTAL DE PACIENTES ATENDIDOS: %d\n");
+    fprintf(arqRelatorio, "NUMERO TOTAL DE PACIENTES ATENDIDOS: %d\n", relatorio -> totalAtendidos);
     fprintf(arqRelatorio, "IDADE MEDIA: %d\n", relatorio -> idadeMedia);
     fprintf(arqRelatorio, "DISTRIBUICAO POR GENERO:\n");
     fprintf(arqRelatorio, "- FEMININO: %d\n", relatorio -> f);

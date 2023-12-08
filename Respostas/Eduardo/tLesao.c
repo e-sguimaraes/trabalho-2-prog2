@@ -8,9 +8,9 @@
 
 
 struct tLesao {
-    char * rotulo[TAM_ROTULO];
-    char * diagnostico[TAM_DIAGNO];
-    char * regiao[TAM_REGIAO];
+    char rotulo[TAM_ROTULO];
+    char diagnostico[TAM_DIAGNO];
+    char regiao[TAM_REGIAO];
     int tamanho;
     int necessitaCirurgia;
     int necessitaCrioterapia;
@@ -33,9 +33,9 @@ void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
     printf("#################### CONSULTA MEDICA #######################\n");
     printf("CADASTRO DE LESAO:\n");
     printf("DIAGNOSTICO CLINICO: ");
-    scanf("%s%*c", &lesao -> diagnostico);
+    scanf("%s%*c", lesao -> diagnostico);
     printf("REGIAO DO CORPO: ");
-    scanf("%s%*c", &lesao -> regiao);
+    scanf("%s%*c", lesao -> regiao);
     printf("TAMANHO: ");
     scanf("%d%*c", &lesao -> tamanho);
     printf("ENVIO PARA CIRURGIA: ");

@@ -3,12 +3,12 @@
 #include <string.h>
 #include "tPaciente.h"
 
-typedef struct tPaciente {
-    char * nomePaciente[MAX_NOME];
-    char * cpf[TAM_CPF];
-    char * dataNascimento[TAM_DATA];
-    char * telefone[TAM_TEL];
-    char * genero[TAM_GEN];
+struct tPaciente {
+    char nomePaciente[MAX_NOME];
+    char cpf[TAM_CPF];
+    char dataNascimento[TAM_DATA];
+    char telefone[TAM_TEL];
+    char genero[TAM_GEN];
     int idade;
     int diabetico;
     int fumante;

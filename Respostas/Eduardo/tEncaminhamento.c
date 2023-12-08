@@ -4,13 +4,13 @@
 #include "tEncaminhamento.h"
 
 struct tEncaminhamento{
-    char * nomePaciente[MAX_NOME];
-    char * cpf[TAM_CPF];
-    char * especialidade[MAX_TAM_ESPECIALIDADE];
-    char * motivo[MAX_TAM_MOTIVO];
-    char * nomeMedico[MAX_NOME];
-    char * crm[TAM_CRM];
-    char * data[TAM_DATA];
+    char nomePaciente[MAX_NOME];
+    char cpf[TAM_CPF];
+    char especialidade[MAX_TAM_ESPECIALIDADE];
+    char motivo[MAX_TAM_MOTIVO];
+    char nomeMedico[MAX_NOME];
+    char crm[TAM_CRM];
+    char data[TAM_DATA];
 };
 
 

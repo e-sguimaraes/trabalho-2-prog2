@@ -41,6 +41,162 @@ tSistema * criaSistema() {
 
     adicionaUsuarioSistema(sistema, 2); 
     
+return sistema;
+}
+
+void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, char * crm, int nivelUser) {
+
+    char conserta = nomeUsuario[0];
+
+    if(nivelUser = 3) nomeUsuario[0] = '\0';
+
+    printf("---\n");
+    printf("- NOME: %s\n", ObtemNomePaciente(paciente));
+    printf("- DATA DE NASCIMENTO: %s\n", ObtemNascimentoPaciente(paciente));
+    printf("---\n");
+
+    char dataConsulta[TAM_DATA];
+    int diabetes;
+    int fumante;
+    int alergia;
+    int historicoDeCancer;
+    int tipoPele;
+
+    printf("DATA DA CONSULTA: ");
+    scanf("%s%*c", dataConsulta);
+    printf("POSSUI DIABETES: ");
+    scanf("%d%*c", &diabetes);
+    printf("FUMANTE: ");
+    scanf("%d%*c", &fumante);
+    printf("ALEGIA A MEDICAMENTO: ");
+    scanf("%d%*c", &alergia);
+    printf("HISTORICO DE CANCER: ");
+    scanf("%d%*c", &historicoDeCancer);
+    printf("TIPO DE PELE: ");
+    scanf("%d%*c", &tipoPele);
+
+    AlteraDiabetePaciente(paciente, diabetes);
+    AlteraFumantePaciente(paciente, diabetes);
+    AlteraAlergiaMedicamento(paciente, diabetes);
+    AlteraHistoricoDeCancerPaciente(paciente, diabetes);
+    AlteraTipoDePelePaciente(paciente, diabetes);
+
+    int opcao;
+
+    while(opcao != 5) {
+        printf("#################### CONSULTA MEDICA #######################");
+        printf("ESCOLHA UMA OPCAO:\n");
+        printf("\t(1) CADASTRAR LESAO\n");
+        printf("\t(2) GERAR RECEITA MEDICA\n");
+        printf("\t(3) SOLICITACAO DE BIOPSIA\n");
+        printf("\t(4) ENCAMINHAMENTO\n");
+        printf("\t(5) ENCERRAR CONSULTA\n");
+        printf("############################################################\n");
+
+        scanf("%d%*c", &opcao);
+
+        switch (opcao) {
+            case 1:
+
+                adicionaLesaoPaciente(paciente);
+
+                break;
+
+            case 2:
+
+                char tipoUso[10];
+                char nomeMedicamento[MAX_TAM_NOME_MEDICAMENTO];
+                char tipoMedicamento[MAX_TAM_TIPO_MEDICAMENTO];
+                int qtdMedicamento;
+                char instrucoes[MAX_TAM_INSTRUCOES];
+
+                printf("RECEITA MEDICA:\n");
+                printf("TIPO DE USO: ");
+                scanf("%s%*c", tipoUso);
+                printf("NOME DO MEDICAMENTO: ");
+                scanf("%s%*c", nomeMedicamento);
+                printf("TIPO DE MEDICAMENTO: ");
+                scanf("%s%*c", tipoMedicamento);
+                printf("QUANTIDADE: ");
+                scanf("%d%*c", &qtdMedicamento);
+                printf("INSTRUÇÕES DE USO: ");
+                scanf("%[^\n]%*c", instrucoes);
+
+                int tipoUsoInt;
+                if(tipoUso[0] == 'O') tipoUsoInt = 0;
+
+                tReceita * receita = criaReceita(ObtemNomePaciente(paciente), tipoUsoInt, nomeMedicamento, tipoMedicamento, instrucoes, 
+                                                 qtdMedicamento, nomeUsuario, crm, dataConsulta); 
+
+                insereDocumentoFila(fila, receita, imprimeNaTelaReceita, imprimeEmArquivoReceita, desalocaReceita);
+
+                printf("RECEITA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
+                printf("############################################################\n");
+
+                scanf("%*c");
+
+                break;
+
+            case 3: 
+                
+                int precisaDeCirurgia = 0;
+
+                for(int i = 0; i < ObtemQuantidadeLesoesPaciente(paciente); i++) {
+                    if(NecessitaCirurgiaLesao(ObtemLesoesPaciente(paciente)[i])) {
+                        tBiopsia * biopsia = criaBiopsia(ObtemNomePaciente(paciente), ObtemCPFPaciente(paciente), ObtemLesoesPaciente(paciente), 
+                                    ObtemQuantidadeLesoesPaciente(paciente), nomeUsuario, crm, dataConsulta);
+
+                        insereDocumentoFila(fila, biopsia, imprimeNaTelaBiopsia, imprimeEmArquivoBiopsia, desalocaBiopsia);
+
+                        precisaDeCirurgia = 1;
+                        break;
+                    }
+                }
+
+                if(precisaDeCirurgia) {
+                    printf("#################### CONSULTA MEDICA #######################\n");
+                    printf("SOLICITACAO DE BIOPSIA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
+                    printf("############################################################\n");
+                }
+                else {
+                    printf("#################### CONSULTA MEDICA #######################\n");
+                    printf("NAO E POSSIVEL SOLICITAR BIOPSIA SEM LESAO CIRURGICA. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
+                    printf("############################################################\n");
+                }
+
+                scanf("%*c");
+
+                break;
+
+            case 4:
+
+                char especialidade[MAX_TAM_ESPECIALIDADE];
+                char motivo[MAX_TAM_MOTIVO];
+
+                printf("#################### CONSULTA MEDICA #######################\n");
+                printf("ENCAMINHAMENTO:\n");
+                printf("ESPECIALIDADE ENCAMINHADA: ");
+                scanf("%[^\n]%*c", especialidade);
+                printf("MOTIVO: ");
+                scanf("%[^\n]%*c", motivo);
+
+                tEncaminhamento * encaminhamento = criaEncaminhamento(ObtemNomePaciente(paciente), ObtemCPFPaciente(paciente), nomeUsuario, 
+                                                                      especialidade, motivo, crm, dataConsulta);
+
+                insereDocumentoFila(fila, encaminhamento, imprimeNaTelaEncaminhamento, imprimeEmArquivoEncaminhamento, desalocaEncaminhamento);
+
+                printf("ENCAMINHAMENTO ENVIADO PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
+                printf("############################################################");
+
+                scanf("%*c");
+
+                break;
+                
+        }
+    }
+
+    nomeUsuario[0] = conserta;
+    
 }
 
 void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
@@ -48,16 +204,16 @@ void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
     sistema -> qtdUsuarios++;
     if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
 
-    char * nomeUsuario[MAX_NOME];
-    char * cpf[TAM_CPF];
-    char * dataNascimento[TAM_DATA];
-    char * telefone[TAM_TEL];
-    char * genero[TAM_GEN];
-    char * crm[TAM_CRM];
-    char * nomeUser[MAX_USER];
-    char * senhaUser[MAX_USER];
+    char nomeUsuario[MAX_NOME];
+    char cpf[TAM_CPF];
+    char dataNascimento[TAM_DATA];
+    char telefone[TAM_TEL];
+    char genero[TAM_GEN];
+    char crm[TAM_CRM];
+    char nomeUser[MAX_USER];
+    char senhaUser[MAX_USER];
 
-    char * nivelAcesso;
+    char nivelAcesso[5];
 
     switch (nivelUser) {
 
@@ -124,11 +280,11 @@ void adicionaPaciente(tSistema * sistema) {
     sistema -> qtdPacientes++;
     if(sistema -> qtdPacientes > 1) sistema -> pacientes = (tPaciente **) realloc(sistema -> pacientes, sistema -> qtdPacientes * sizeof(tPaciente *));
 
-    char * nomePaciente[MAX_NOME];
-    char * cpf[TAM_CPF];
-    char * dataNascimento[TAM_DATA];
-    char * telefone[TAM_TEL];
-    char * genero[TAM_GEN];
+    char nomePaciente[MAX_NOME];
+    char cpf[TAM_CPF];
+    char dataNascimento[TAM_DATA];
+    char telefone[TAM_TEL];
+    char genero[TAM_GEN];
     int dia, mes, ano, idade = 0;
 
     printf("#################### CADASTRO PACIENTE #######################\n");
@@ -143,7 +299,7 @@ void adicionaPaciente(tSistema * sistema) {
     printf("GENERO: ");
     scanf("%s%*c", genero);
 
-    fprintf(dataNascimento, "%02d/%02d/%04d", dia, mes, ano);
+    sprintf(dataNascimento, "%02d/%02d/%04d", dia, mes, ano);
 
     if((dia <= DIA_ATUAL && mes == MES_ATUAL) || (mes < MES_ATUAL)) {
         idade = ANO_ATUAL - ano;
@@ -163,12 +319,12 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
     printf("#################### CONSULTA MEDICA #######################\n");
     printf("CPF DO PACIENTE: ");
 
-    char * cpfConsultado[TAM_CPF];
+    char cpfConsultado[TAM_CPF];
     int cpfEncontrado = 0;
     scanf("%s%*c", cpfConsultado);
     
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
-        if(strcmp(cpfConsultado, sistema -> pacientes[i])) {
+        if(strcmp(cpfConsultado, ObtemCPFPaciente(sistema -> pacientes[i]))) {
             consultaPaciente(sistema -> fila, sistema -> pacientes[i], ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), ObtemNivelUser(usuario));
             sistema -> qtdAtendidos++;
             cpfEncontrado = 1;
@@ -182,7 +338,7 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
 
 void buscaPacienteSistema(tSistema * sistema) {
 
-    char * pacienteProcurado[MAX_NOME];
+    char pacienteProcurado[MAX_NOME];
 
     printf("#################### BUSCAR PACIENTES #######################\n");
     printf("NOME DO PACIENTE: ");
@@ -239,9 +395,9 @@ void relatorioGeralSistema(tSistema * sistema) {
     int idadeMedia = 0, f = 0, m = 0, o = 0, tamMedioLesoes = 0, nLesoes = 0, cirurgiaLesoes = 0, crioterapiaLesoes = 0;
 
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
-        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] = "F") f++;
-        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] = "M") m++;
-        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] = "O") o++;
+        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] == 'F') f++;
+        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] == 'M') m++;
+        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] == 'O') o++;
 
         nLesoes += ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]);
     
@@ -310,11 +466,11 @@ tUsuario * fazLogin(tSistema * sistema) {
     int usuarioEncontrado = 0;
 
     while(1) {
-        scanf("%s", nome);
-        scanf("%s", senha);
-        
+        scanf("%s%*c", nome);
+        scanf("%s%*c", senha);
+
         for(int i = 0; i < sistema -> qtdUsuarios; i++) {
-            if(strcmp(nome, ObtemNomeUser(sistema -> usuarios[i])) && strcmp(senha, ObtemSenhaUser(sistema -> usuarios[i]))) {
+            if(!strcmp(nome, ObtemNomeUser(sistema -> usuarios[i])) && !strcmp(senha, ObtemSenhaUser(sistema -> usuarios[i]))) {
                 printf("USUARIO LOGADO COM SUCESSO\n");
                 return sistema -> usuarios[i];
             }
@@ -337,159 +493,4 @@ return sistema -> qtdPacientes;
 
 tPaciente * obtemPaciente(tSistema * sistema, int indice) {
 return sistema -> pacientes[indice];
-}
-
-void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, char * crm, int nivelUser) {
-
-    char conserta = nomeUsuario[0];
-
-    if(nivelUser = 3) nomeUsuario[0] = '\0';
-
-    printf("---\n");
-    printf("- NOME: %s\n", ObtemNomePaciente(paciente));
-    printf("- DATA DE NASCIMENTO: %s\n", ObtemNascimentoPaciente(paciente));
-    printf("---\n");
-
-    char * dataConsulta;
-    int diabetes;
-    int fumante;
-    int alergia;
-    int historicoDeCancer;
-    int tipoPele;
-
-    printf("DATA DA CONSULTA: ");
-    scanf("%s%*c", dataConsulta);
-    printf("POSSUI DIABETES: ");
-    scanf("%d%*c", diabetes);
-    printf("FUMANTE: ");
-    scanf("%d%*c", fumante);
-    printf("ALEGIA A MEDICAMENTO: ");
-    scanf("%d%*c", alergia);
-    printf("HISTORICO DE CANCER: ");
-    scanf("%d%*c", historicoDeCancer);
-    printf("TIPO DE PELE: ");
-    scanf("%d%*c", tipoPele);
-
-    AlteraDiabetePaciente(paciente, diabetes);
-    AlteraFumantePaciente(paciente, diabetes);
-    AlteraAlergiaMedicamento(paciente, diabetes);
-    AlteraHistoricoDeCancerPaciente(paciente, diabetes);
-    AlteraTipoDePelePaciente(paciente, diabetes);
-
-    int opcao;
-
-    while(opcao != 5) {
-        printf("#################### CONSULTA MEDICA #######################");
-        printf("ESCOLHA UMA OPCAO:\n");
-        printf("\t(1) CADASTRAR LESAO\n");
-        printf("\t(2) GERAR RECEITA MEDICA\n");
-        printf("\t(3) SOLICITACAO DE BIOPSIA\n");
-        printf("\t(4) ENCAMINHAMENTO\n");
-        printf("\t(5) ENCERRAR CONSULTA\n");
-        printf("############################################################\n");
-
-        scanf("%d%*c", &opcao);
-
-        switch (opcao) {
-            case 1:
-
-                adicionaLesaoPaciente(paciente);
-
-                break;
-
-            case 2:
-
-                char * tipoUso[10];
-                char * nomeMedicamento[MAX_TAM_NOME_MEDICAMENTO];
-                char * tipoMedicamento[MAX_TAM_TIPO_MEDICAMENTO];
-                int * qtdMedicamento;
-                char * instrucoes[MAX_TAM_INSTRUCOES];
-
-                printf("RECEITA MEDICA:\n");
-                printf("TIPO DE USO: ");
-                scanf("%s%*c", tipoUso);
-                printf("NOME DO MEDICAMENTO: ");
-                scanf("%s%*c", nomeMedicamento);
-                printf("TIPO DE MEDICAMENTO: ");
-                scanf("%s%*c", tipoMedicamento);
-                printf("QUANTIDADE: ");
-                scanf("%d%*c", &qtdMedicamento);
-                printf("INSTRUÇÕES DE USO: ");
-                scanf("%[^\n]%*c", instrucoes);
-
-                int tipoUsoInt;
-                if(tipoUso[0] == 'O') tipoUsoInt = 0;
-
-                tReceita * receita = criaReceita(ObtemNomePaciente(paciente), tipoUsoInt, nomeMedicamento, tipoMedicamento, instrucoes, 
-                                                 qtdMedicamento, nomeUsuario, crm, dataConsulta); 
-
-                insereDocumentoFila(fila, receita, imprimeNaTelaReceita, imprimeEmArquivoReceita, desalocaReceita);
-
-                printf("RECEITA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
-                printf("############################################################\n");
-
-                scanf("%*c");
-
-                break;
-
-            case 3: 
-                
-                int precisaDeCirurgia = 0;
-
-                for(int i = 0; i < ObtemQuantidadeLesoesPaciente(paciente); i++) {
-                    if(NecessitaCirurgiaLesao(ObtemLesoesPaciente(paciente)[i])) {
-                        tBiopsia * biopsia = criaBiopsia(ObtemNomePaciente(paciente), ObtemCPFPaciente(paciente), ObtemLesoesPaciente(paciente), 
-                                    ObtemQuantidadeLesoesPaciente(paciente), nomeUsuario, crm, dataConsulta);
-
-                        insereDocumentoFila(fila, biopsia, imprimeNaTelaBiopsia, imprimeEmArquivoBiopsia, desalocaBiopsia);
-
-                        precisaDeCirurgia = 1;
-                        break;
-                    }
-                }
-
-                if(precisaDeCirurgia) {
-                    printf("#################### CONSULTA MEDICA #######################\n");
-                    printf("SOLICITACAO DE BIOPSIA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
-                    printf("############################################################\n");
-                }
-                else {
-                    printf("#################### CONSULTA MEDICA #######################\n");
-                    printf("NAO E POSSIVEL SOLICITAR BIOPSIA SEM LESAO CIRURGICA. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
-                    printf("############################################################\n");
-                }
-
-                scanf("%*c");
-
-                break;
-
-            case 4:
-
-                char * especialidade[MAX_TAM_ESPECIALIDADE];
-                char * motivo[MAX_TAM_MOTIVO];
-
-                printf("#################### CONSULTA MEDICA #######################\n");
-                printf("ENCAMINHAMENTO:\n");
-                printf("ESPECIALIDADE ENCAMINHADA: ");
-                scanf("%[^\n]%*c", especialidade);
-                printf("MOTIVO: ");
-                scanf("%[^\n]%*c", motivo);
-
-                tEncaminhamento * encaminhamento = criaEncaminhamento(ObtemNomePaciente(paciente), ObtemCPFPaciente(paciente), nomeUsuario, 
-                                                                      especialidade, motivo, crm, dataConsulta);
-
-                insereDocumentoFila(fila, encaminhamento, imprimeNaTelaEncaminhamento, imprimeEmArquivoEncaminhamento, desalocaEncaminhamento);
-
-                printf("ENCAMINHAMENTO ENVIADO PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
-                printf("############################################################");
-
-                scanf("%*c");
-
-                break;
-                
-        }
-    }
-
-    nomeUsuario[0] = conserta;
-    
 }
