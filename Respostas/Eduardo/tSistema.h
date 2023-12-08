@@ -1,6 +1,8 @@
 #ifndef _TSISTEMA_H_
 #define _TSISTEMA_H_
 
+#include "tUsuario.h"
+
 typedef struct tSistema tSistema;
 
 /**

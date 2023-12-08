@@ -4,7 +4,6 @@
 #include "tPaciente.h"
 #include "limites.h"
 #include "tReceita.h"
-#include "tUsuario.h"
 #include "tBiopsia.h"
 #include "tEncaminhamento.h"
 
@@ -109,8 +108,39 @@ int ObtemTipoPelePaciente(tPaciente * paciente) {
 return paciente -> tipoPele;
 }
 
+int ObtemQuantidadeLesoesPaciente(tPaciente * paciente) {
+return paciente -> qtdLesoes;
+}
 
-void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
+
+int ObtemQtdLesoesCirurgia(tPaciente * paciente) {
+
+    int cont = 0;
+
+    for(int i = 0; i < paciente -> qtdLesoes; i++) {
+        if(NecessitaCirurgiaLesao(paciente -> lesoes[i])) cont++;
+    }
+
+return cont;
+}
+
+
+int ObtemQtdLesoesCrioterapia(tPaciente * paciente) {
+
+    int cont = 0;
+
+    for(int i = 0; i < paciente -> qtdLesoes; i++) {
+        if(NecessitaCrioterapiaLesao(paciente -> lesoes[i])) cont++;
+    }
+
+return cont;  
+}
+
+int ObtemTamanhoLesaoPaciente(tPaciente * paciente, int indice) {
+return ObtemTamanhoLesao(paciente -> lesoes[indice]);
+}
+
+void consultaPaciente(tPaciente * paciente, char * nomeUsuario, char * crm) {
 
     printf("---\n");
     printf("- NOME: %s\n", ObtemNomePaciente(paciente));
@@ -190,7 +220,7 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
 
                 //ISSO TEM QUE SER REVISTO PARA O CASO DE CONSULTA REALIZADA POR SECRETÁRIO;
                 criaReceita(paciente -> nomePaciente, tipoUsoInt, nomeMedicamento, tipoMedicamento, instrucoes, 
-                            qtdMedicamento, ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), dataConsulta); 
+                            qtdMedicamento, nomeUsuario, crm, dataConsulta); 
 
                 printf("RECEITA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
                 printf("############################################################\n");
@@ -203,8 +233,8 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
 
                 for(int i = 0; i < paciente -> qtdLesoes; i++) {
                     if(NecessitaCirurgiaLesao(paciente -> lesoes[i])) {
-                        criaBiopsia(paciente -> nomePaciente, paciente -> cpf, paciente -> lesoes, paciente -> qtdLesoes, 
-                            ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), dataConsulta);
+                        criaBiopsia(paciente -> nomePaciente, paciente -> cpf, paciente -> lesoes, 
+                                    paciente -> qtdLesoes, nomeUsuario, crm, dataConsulta);
                         precisaDeCirurgia = 1;
                         break;
                     }
@@ -235,8 +265,8 @@ void consultaPaciente(tPaciente * paciente, tUsuario * usuario) {
                 printf("MOTIVO: ");
                 scanf("%[^\n]%*c", motivo);
 
-                criaEncaminhamento(paciente -> nomePaciente, paciente -> cpf, ObtemNomeUsuario(usuario), 
-                                   especialidade, motivo, ObtemCRMUsuario(usuario), dataConsulta);
+                criaEncaminhamento(paciente -> nomePaciente, paciente -> cpf, nomeUsuario, 
+                                   especialidade, motivo, crm, dataConsulta);
 
                 printf("ENCAMINHAMENTO ENVIADO PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
                 printf("############################################################");

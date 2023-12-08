@@ -16,6 +16,12 @@ void adicionaLesao(tLesao ** lesao, int qtdLesoes);
 int NecessitaCirurgiaLesao(tLesao * lesao);
 
 
+int NecessitaCrioterapiaLesao(tLesao * lesao);
+
+
+int ObtemTamanhoLesao(tLesao * lesao);
+
+
 void desalocaLesao(tLesao ** lesoes, int qtdLesoes);
 
 

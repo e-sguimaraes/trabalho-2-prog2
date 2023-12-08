@@ -6,6 +6,7 @@
 #include "tPaciente.h"
 #include "tFila.h"
 #include "limites.h"
+#include "tRelatorio.h"
 
 struct tSistema {
     tUsuario ** usuarios;
@@ -23,7 +24,13 @@ tSistema * criaSistema() {
     
     sistema -> usuarios = (tUsuario **) malloc(sizeof(tUsuario *));
 
+    sistema -> pacientes = (tPaciente **) malloc(sizeof(tPaciente *));
+
+    //PAREI AQUI!
+
     adicionaUsuarioSistema(sistema, 2); 
+
+
 
 }
 
@@ -137,7 +144,8 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
     
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         if(strcmp(cpfConsultado, sistema -> pacientes[i])) {
-            consultaPaciente(sistema -> pacientes[i], usuario);
+            consultaPaciente(sistema -> pacientes[i], ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario));
+            sistema -> qtdAtendidos++;
             cpfEncontrado = 1;
         }
     }
@@ -200,21 +208,57 @@ void buscaPacienteSistema(tSistema * sistema) {
     }
 }
 
+
 void relatorioGeralSistema(tSistema * sistema) {
+
+    int idadeMedia = 0, f = 0, m = 0, o = 0, tamMedioLesoes = 0, nLesoes = 0, cirurgiaLesoes = 0, crioterapiaLesoes = 0;
+
+    for(int i = 0; i < sistema -> qtdPacientes; i++) {
+        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] = "F") f++;
+        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] = "M") m++;
+        if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] = "O") o++;
+
+        nLesoes += ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]);
+    
+        for(int j = 0; j < ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]); j++) {
+            tamMedioLesoes += ObtemTamanhoLesaoPaciente(sistema -> pacientes[i], j);
+            
+        }
+
+        cirurgiaLesoes += ObtemQtdLesoesCirurgia(sistema -> pacientes[i]);
+        crioterapiaLesoes += ObtemQtdLesoesCrioterapia(sistema -> pacientes[i]);
+    }
+
+    tamMedioLesoes /= nLesoes;
+
+    tRelatorio * relatorio = criaRelatorio(sistema -> qtdAtendidos, idadeMedia, f, m, o, tamMedioLesoes, nLesoes, cirurgiaLesoes, crioterapiaLesoes);
 
 }
 
 void executaFilaDeImpressao(tSistema * sistema);
 
-void finalizaSistema(tSistema * sistema);
+
+void finalizaSistema(tSistema * sistema) {
+    for(int i = 0; i < sistema -> qtdUsuarios; i++) {
+        desalocaUsuario(sistema -> usuarios[i]);
+    }
+    for(int i = 0; i < sistema -> qtdPacientes; i++) {
+        desalocaPaciente(sistema -> pacientes[i]);
+    }
+
+    free(sistema);
+}
+
 
 int obtemAtendidosSistema(tSistema * sistema) {
 return sistema -> qtdAtendidos;
 }
 
+
 int obtemQtdPacientes(tSistema * sistema) {
 return sistema -> qtdPacientes;
 }
+
 
 tPaciente * obtemPaciente(tSistema * sistema, int indice) {
 return sistema -> pacientes[indice];

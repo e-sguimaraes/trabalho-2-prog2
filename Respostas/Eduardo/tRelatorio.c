@@ -80,7 +80,9 @@ void imprimeEmArquivoRelatorio(void *dado, char *path) {
     fprintf(arqRelatorio, "NUMERO TOTAL DE CIRURGIAS: %d\n", relatorio -> cirurgiaLesoes);
     fprintf(arqRelatorio, "NUMERO TOTAL DE CRIOTERAPIA: %d\n", relatorio -> crioterapiaLesoes);
 
-    //NAO ACABEI AQUI!!!!
+    fprintf(arqRelatorio, "############################################################\n");
+
+    fclose(arqRelatorio);
 
 }
 

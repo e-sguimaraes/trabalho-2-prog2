@@ -52,6 +52,18 @@ void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
 
 }
 
+int NecessitaCirurgiaLesao(tLesao * lesao) {
+return lesao -> necessitaCirurgia;
+}
+
+int NecessitaCrioterapiaLesao(tLesao * lesao) {
+return lesao -> necessitaCrioterapia;
+}
+
+int ObtemTamanhoLesao(tLesao * lesao) {
+return lesao -> tamanho;
+}
+
 
 void desalocaLesao(tLesao ** lesoes, int qtdLesoes) {
 

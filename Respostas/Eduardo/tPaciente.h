@@ -40,7 +40,15 @@ int TemHistoricoDeCancerPaciente(tPaciente * paciente);
 
 int ObtemTipoPelePaciente(tPaciente * paciente);
 
-void consultaPaciente(tPaciente * paciente, tUsuario * usuario);
+int ObtemQuantidadeLesoesPaciente(tPaciente * paciente);
+
+int ObtemQtdLesoesCirurgia(tPaciente * paciente);
+
+int ObtemQtdLesoesCrioterapia(tPaciente * paciente);
+
+int ObtemTamanhoLesaoPaciente(tPaciente * paciente, int indice);
+
+void consultaPaciente(tPaciente * paciente, char * nomeUsuario, char * crm);
 
 /**
  * Função que recebe o ponteiro genérico (que deve conter um paciente) e o desaloca da memória.
