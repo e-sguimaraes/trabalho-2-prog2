@@ -39,7 +39,7 @@ tSistema * criaSistema() {
     sistema -> qtdPacientes = 0;
     sistema -> qtdAtendidos = 0;
 
-    adicionaUsuarioSistema(sistema, 2); 
+    adicionaPessoaSistema(sistema, 2); 
     
 return sistema;
 }
@@ -48,7 +48,7 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
 
     char conserta = nomeUsuario[0];
 
-    if(nivelUser = 3) nomeUsuario[0] = '\0';
+    if(nivelUser > 1) nomeUsuario[0] = '\0';
 
     printf("---\n");
     printf("- NOME: %s\n", ObtemNomePaciente(paciente));
@@ -60,7 +60,7 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
     int fumante;
     int alergia;
     int historicoDeCancer;
-    int tipoPele;
+    char tipoPele[3];
 
     printf("DATA DA CONSULTA: ");
     scanf("%s%*c", dataConsulta);
@@ -73,15 +73,15 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
     printf("HISTORICO DE CANCER: ");
     scanf("%d%*c", &historicoDeCancer);
     printf("TIPO DE PELE: ");
-    scanf("%d%*c", &tipoPele);
+    scanf("%[^\n]%*c", tipoPele);
 
     AlteraDiabetePaciente(paciente, diabetes);
-    AlteraFumantePaciente(paciente, diabetes);
-    AlteraAlergiaMedicamento(paciente, diabetes);
-    AlteraHistoricoDeCancerPaciente(paciente, diabetes);
-    AlteraTipoDePelePaciente(paciente, diabetes);
+    AlteraFumantePaciente(paciente, fumante);
+    AlteraAlergiaMedicamento(paciente, alergia);
+    AlteraHistoricoDeCancerPaciente(paciente, historicoDeCancer);
+    AlteraTipoDePelePaciente(paciente, tipoPele);
 
-    int opcao;
+    int opcao = 0;
 
     while(opcao != 5) {
         printf("#################### CONSULTA MEDICA #######################");
@@ -114,7 +114,7 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
                 printf("TIPO DE USO: ");
                 scanf("%s%*c", tipoUso);
                 printf("NOME DO MEDICAMENTO: ");
-                scanf("%s%*c", nomeMedicamento);
+                scanf("%[^\n]%*c", nomeMedicamento);
                 printf("TIPO DE MEDICAMENTO: ");
                 scanf("%s%*c", tipoMedicamento);
                 printf("QUANTIDADE: ");
@@ -122,8 +122,9 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
                 printf("INSTRUÇÕES DE USO: ");
                 scanf("%[^\n]%*c", instrucoes);
 
-                int tipoUsoInt;
+                eTipoUso tipoUsoInt;
                 if(tipoUso[0] == 'O') tipoUsoInt = 0;
+                if(tipoUso[0] == 'T') tipoUsoInt = 1;
 
                 tReceita * receita = criaReceita(ObtemNomePaciente(paciente), tipoUsoInt, nomeMedicamento, tipoMedicamento, instrucoes, 
                                                  qtdMedicamento, nomeUsuario, crm, dataConsulta); 
@@ -180,8 +181,8 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
                 printf("MOTIVO: ");
                 scanf("%[^\n]%*c", motivo);
 
-                tEncaminhamento * encaminhamento = criaEncaminhamento(ObtemNomePaciente(paciente), ObtemCPFPaciente(paciente), nomeUsuario, 
-                                                                      especialidade, motivo, crm, dataConsulta);
+                tEncaminhamento * encaminhamento = criaEncaminhamento(ObtemNomePaciente(paciente), ObtemCPFPaciente(paciente), especialidade, 
+                                                                      motivo, nomeUsuario, crm, dataConsulta);
 
                 insereDocumentoFila(fila, encaminhamento, imprimeNaTelaEncaminhamento, imprimeEmArquivoEncaminhamento, desalocaEncaminhamento);
 
@@ -199,12 +200,10 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
     
 }
 
-void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
-
-    sistema -> qtdUsuarios++;
-    if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
+void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
 
     char nomeUsuario[MAX_NOME];
+    char nomePaciente[MAX_NOME];
     char cpf[TAM_CPF];
     char dataNascimento[TAM_DATA];
     char telefone[TAM_TEL];
@@ -212,12 +211,45 @@ void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
     char crm[TAM_CRM];
     char nomeUser[MAX_USER];
     char senhaUser[MAX_USER];
+    int dia, mes, ano, idade = 0;
 
-    char nivelAcesso[5];
+    char nivelAcesso[6];
 
     switch (nivelUser) {
 
+        case 0:
+            sistema -> qtdPacientes++;
+            if(sistema -> qtdPacientes > 1) sistema -> pacientes = (tPaciente **) realloc(sistema -> pacientes, sistema -> qtdPacientes * sizeof(tPaciente *));
+
+            printf("#################### CADASTRO PACIENTE #######################\n");
+            printf("NOME COMPLETO: ");
+            scanf("%[^\n]%*c", nomePaciente);
+            printf("CPF: ");
+            scanf("%s%*c", cpf);
+            printf("DATA DE NASCIMENTO: ");
+            scanf("%d/%d/%d%*c", &dia, &mes, &ano);
+            printf("TELEFONE: ");
+            scanf("%s%*c", telefone);
+            printf("GENERO: ");
+            scanf("%s%*c", genero);
+
+            sprintf(dataNascimento, "%d/%d/%d", dia, mes, ano);
+
+            if((dia <= DIA_ATUAL && mes == MES_ATUAL) || (mes < MES_ATUAL)) {
+                idade = ANO_ATUAL - ano;
+            }
+            else {
+                idade = ANO_ATUAL - ano - 1;
+            }
+
+            sistema -> pacientes[(sistema -> qtdPacientes) - 1] = cadastraPaciente(nomePaciente, cpf, dataNascimento, telefone, genero, idade);
+            break;
+
         case 1:
+
+            sistema -> qtdUsuarios++;
+            if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
+
             printf("#################### CADASTRO MEDICO #######################\n");
             printf("NOME COMPLETO: ");
             scanf("%[^\n]%*c", nomeUsuario);
@@ -242,6 +274,10 @@ void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
             break;
 
         case 2:
+
+            sistema -> qtdUsuarios++;
+            if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
+
             printf("#################### CADASTRO SECRETARIO #######################\n");
             printf("NOME COMPLETO: ");
             scanf("%[^\n]%*c", nomeUsuario);
@@ -259,58 +295,22 @@ void adicionaUsuarioSistema(tSistema * sistema, int nivelUser) {
             scanf("%s%*c", senhaUser);
             printf("NIVEL DE ACESSO: ");
             scanf("%s%*c", nivelAcesso);
-            crm[0] = '\0';
 
             if(nivelAcesso[0] == 'A') nivelUser = 3;
 
             sistema -> usuarios[(sistema -> qtdUsuarios) - 1] = cadastraUsuario(nomeUsuario, cpf, dataNascimento, telefone, 
                                                                                 genero, crm, nomeUser, senhaUser, nivelUser);
+
+            if(sistema -> qtdUsuarios == 1) return;
+
             break;
-        
+
+
     }
     printf("CADASTRO REALIZADO COM SUCESSO. PRESSIONE QUALQUER TECLA PARA VOLTAR PARA O MENU INICIAL\n");
     printf("############################################################\n");
 
     scanf("%*c");
-
-}
-
-void adicionaPaciente(tSistema * sistema) {
-
-    sistema -> qtdPacientes++;
-    if(sistema -> qtdPacientes > 1) sistema -> pacientes = (tPaciente **) realloc(sistema -> pacientes, sistema -> qtdPacientes * sizeof(tPaciente *));
-
-    char nomePaciente[MAX_NOME];
-    char cpf[TAM_CPF];
-    char dataNascimento[TAM_DATA];
-    char telefone[TAM_TEL];
-    char genero[TAM_GEN];
-    int dia, mes, ano, idade = 0;
-
-    printf("#################### CADASTRO PACIENTE #######################\n");
-    printf("NOME COMPLETO: ");
-    scanf("%[^\n]%*c", nomePaciente);
-    printf("CPF: ");
-    scanf("%s%*c", cpf);
-    printf("DATA DE NASCIMENTO: ");
-    scanf("%d/%d/%d%*c", &dia, &mes, &ano);
-    printf("TELEFONE: ");
-    scanf("%s%*c", telefone);
-    printf("GENERO: ");
-    scanf("%s%*c", genero);
-
-    sprintf(dataNascimento, "%02d/%02d/%04d", dia, mes, ano);
-
-    if((dia <= DIA_ATUAL && mes == MES_ATUAL) || (mes < MES_ATUAL)) {
-        idade = ANO_ATUAL - ano;
-    }
-    else {
-        idade = ANO_ATUAL - ano - 1;
-    }
-
-    sistema -> pacientes[(sistema -> qtdPacientes) - 1] = cadastraPaciente(nomePaciente, cpf, dataNascimento, telefone, genero, idade);
-
-    printf("#############################################################\n");
 
 }
 
@@ -324,15 +324,18 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
     scanf("%s%*c", cpfConsultado);
     
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
-        if(strcmp(cpfConsultado, ObtemCPFPaciente(sistema -> pacientes[i]))) {
+        if(!strcmp(cpfConsultado, ObtemCPFPaciente(sistema -> pacientes[i]))) {
             consultaPaciente(sistema -> fila, sistema -> pacientes[i], ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), ObtemNivelUser(usuario));
             sistema -> qtdAtendidos++;
             cpfEncontrado = 1;
         }
     }
-    if(!cpfEncontrado) printf("PACIENTE SEM CADASTRO\n\nPRESSIONE QUALQUER TECLA PARA VOLTAR AO MENU PRINCIPAL\n############################################################");
+    if(!cpfEncontrado) {
+        printf("PACIENTE SEM CADASTRO PRESSIONE QUALQUER TECLA PARA VOLTAR AO MENU PRINCIPAL\n");
+        printf("############################################################\n");
+        scanf("%*c");
+    }
 
-    scanf("%*c");
 
 }
 
@@ -348,7 +351,7 @@ void buscaPacienteSistema(tSistema * sistema) {
     int pacienteEncontrado = 0;
 
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
-        if(strcmp(pacienteProcurado, ObtemNomePaciente(sistema -> pacientes[i]))) {
+        if(!strcmp(pacienteProcurado, ObtemNomePaciente(sistema -> pacientes[i]))) {
             pacienteEncontrado = 1;
             break;
         }
@@ -369,7 +372,7 @@ void buscaPacienteSistema(tSistema * sistema) {
 
         int opcao;
 
-        scanf("%d", &opcao);
+        scanf("%d%*c", &opcao);
         if(opcao == 1) {
 
             insereDocumentoFila(sistema -> fila, lista, imprimeNaTelaListaBusca, imprimeEmArquivoListaBusca, desalocaListaBusca);
@@ -377,6 +380,9 @@ void buscaPacienteSistema(tSistema * sistema) {
             printf("#################### BUSCAR PACIENTES #######################\n");
             printf("LISTA ENVIADA PARA FILA DE IMPRESSAO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU PRINCIPAL\n");
             printf("############################################################\n");
+        }
+        else {
+            return;
         }
     }
     else {
@@ -411,7 +417,7 @@ void relatorioGeralSistema(tSistema * sistema) {
         crioterapiaLesoes += ObtemQtdLesoesCrioterapia(sistema -> pacientes[i]);
     }
 
-    idadeMedia /= sistema -> qtdAtendidos;
+    idadeMedia /= sistema -> qtdPacientes;
     tamMedioLesoes /= nLesoes;
 
 
@@ -425,7 +431,7 @@ void relatorioGeralSistema(tSistema * sistema) {
     printf("############################################################\n");
 
     int opcao;
-    scanf("%d", &opcao);
+    scanf("%d%*c", &opcao);
 
     if(opcao == 1) {
         insereDocumentoFila(sistema -> fila, relatorio, imprimeNaTelaRelatorio, imprimeEmArquivoRelatorio, desalocaRelatorio);
@@ -440,7 +446,16 @@ void relatorioGeralSistema(tSistema * sistema) {
 }
 
 void executaFilaDeImpressao(tSistema * sistema, char * path) {
-    imprimeFila(sistema -> fila, path);
+    printf("################### FILA DE IMPRESSAO MEDICA #####################\n");
+    printf("ESCOLHA UMA OPCAO: \n");
+    printf("\t(1) EXECUTAR FILA DE IMPRESSAO\n");
+    printf("\t(2) RETORNAR AO MENU ANTERIOR\n");
+    printf("############################################################\n");
+    
+    int opcao = 0;
+    scanf("%d%*c", &opcao);
+    if(opcao == 1) imprimeFila(sistema -> fila, path);
+
 }
 
 
@@ -449,10 +464,12 @@ void finalizaSistema(tSistema * sistema) {
     for(int i = 0; i < sistema -> qtdUsuarios; i++) {
         desalocaUsuario(sistema -> usuarios[i]);
     }
+    free(sistema -> usuarios);
 
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         desalocaPaciente(sistema -> pacientes[i]);
     }
+    free(sistema -> pacientes);
 
     desalocaFila(sistema -> fila);
 
@@ -463,7 +480,6 @@ tUsuario * fazLogin(tSistema * sistema) {
 
     char nome[20];
     char senha[20];
-    int usuarioEncontrado = 0;
 
     while(1) {
         scanf("%s%*c", nome);

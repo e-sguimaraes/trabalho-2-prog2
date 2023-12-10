@@ -55,7 +55,7 @@ void imprimeEmArquivoRelatorio(void *dado, char *path) {
     FILE * arqRelatorio = NULL;
     tRelatorio * relatorio = (tRelatorio *)dado;
 
-    char diretorioDoRelatorio[50];
+    char diretorioDoRelatorio[100];
     sprintf(diretorioDoRelatorio, "%s/%s", path, NOME_ARQUIVO_RELATORIO);
     arqRelatorio = fopen(diretorioDoRelatorio, "a");
 

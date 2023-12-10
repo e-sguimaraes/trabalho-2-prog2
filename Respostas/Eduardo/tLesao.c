@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "tLesao.h"
 
 #define TAM_ROTULO 5
@@ -17,11 +18,17 @@ struct tLesao {
 };
 
 
-tLesao * criaLesao() {
+tLesao * copiaLesao(tLesao * src) {
 
-    tLesao * lesao = (tLesao *) malloc(sizeof(tLesao));
+    tLesao * dest = (tLesao *) malloc(sizeof(tLesao));
+    strcpy(dest -> rotulo, src -> rotulo);
+    strcpy(dest -> diagnostico, src -> diagnostico);
+    strcpy(dest -> regiao, src -> regiao);
+    dest -> tamanho = src -> tamanho;
+    dest -> necessitaCirurgia = src -> necessitaCirurgia;
+    dest -> necessitaCrioterapia = src -> necessitaCrioterapia;
 
-return lesao;
+return dest;
 }
 
 void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
@@ -43,8 +50,7 @@ void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
     printf("ENVIO PARA CRIOTERAPIA: ");
     scanf("%d%*c", &lesao -> necessitaCrioterapia);
 
-    lesoes = (tLesao **) realloc(lesoes, qtdLesoes * sizeof(tLesao *));
-    lesoes[qtdLesoes - 1] = (tLesao *) malloc(sizeof(tLesao));
+    if(qtdLesoes > 1) lesoes = (tLesao **) realloc(lesoes, qtdLesoes * sizeof(tLesao *));
     lesoes[qtdLesoes - 1] = lesao;
 
     printf("LESAO REGISTRADA COM SUCESSO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
@@ -87,11 +93,8 @@ void imprimeNaTelaLesao(tLesao ** lesoes, int qtdLesoes) {
 }
 
 
-void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, char *path) {
+void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao) {
 
-    FILE * arqLesao = NULL;
-
-    arqLesao = fopen(path, "a");
     for(int i = 0; i < qtdLesoes; i++) {
         if(NecessitaCirurgiaLesao(lesoes[i])) fprintf(arqLesao, "%s - %s - %s - %dMM\n\n", lesoes[i] -> rotulo, 
                                                       lesoes[i] -> diagnostico, lesoes[i] -> regiao, lesoes[i] -> tamanho);

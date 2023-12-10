@@ -3,14 +3,14 @@
 #include <string.h>
 #include "tReceita.h"
 
-#define MAX_NOME 100
-#define TAM_CRM 12
-#define TAM_DATA 10
-#define TAM_CPF 14
-#define TAM_TEL 14
-#define TAM_GEN 9
-#define MAX_TAM_ESPECIALIDADE 50
-#define MAX_TAM_MOTIVO 300
+#define MAX_NOME 101
+#define TAM_CRM 13
+#define TAM_DATA 11
+#define TAM_CPF 15
+#define TAM_TEL 15
+#define TAM_GEN 10
+#define MAX_TAM_ESPECIALIDADE 51
+#define MAX_TAM_MOTIVO 301
 
 struct tReceita {
     char pacienteNome[MAX_NOME];
@@ -77,7 +77,7 @@ void imprimeEmArquivoReceita(void *dado, char *path) {
     FILE * arqReceita = NULL;
     tReceita * receita = (tReceita *)dado;
 
-    char diretorioDaReceita[50];
+    char diretorioDaReceita[100];
     sprintf(diretorioDaReceita, "%s/%s", path, NOME_ARQUIVO_RECEITA);
     arqReceita = fopen(diretorioDaReceita, "a");
 

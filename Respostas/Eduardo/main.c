@@ -5,19 +5,21 @@
 
 int main(int argc, char * argv[]) {
 
-    /* if(argc <= 1) {
+    char diretorioGeral[1001], binaryPath[1001];
+
+    scanf("%s%*c", binaryPath);
+
+    if(argc <= 1) {
         printf("ERRO: o diretório de arquivos não foi informado");
         exit(1);
-    } */
+    }
 
-    char * diretorioGeral[1000];
-    //sprintf(diretorioGeral, "%s/saida", argv[1]);
+    sprintf(diretorioGeral, "%s/saida", argv[1]);
 
     tSistema * sistema = criaSistema();
-    int opcao;
-    tUsuario * logado;
+    int opcao = 0;
 
-    logado = fazLogin(sistema);
+    tUsuario * logado = fazLogin(sistema);
 
     while(opcao != 8) {
 
@@ -38,15 +40,15 @@ int main(int argc, char * argv[]) {
         switch (opcao) {
 
             case 1:
-                adicionaUsuarioSistema(sistema, 2);
+                adicionaPessoaSistema(sistema, 2);
                 break;
 
             case 2:
-                adicionaUsuarioSistema(sistema, 1);
+                adicionaPessoaSistema(sistema, 1);
                 break;
 
             case 3:
-                adicionaPaciente(sistema);
+                adicionaPessoaSistema(sistema, 0);
                 break;
 
             case 4:

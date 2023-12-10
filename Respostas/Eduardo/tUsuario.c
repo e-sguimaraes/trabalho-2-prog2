@@ -2,6 +2,14 @@
 #include <string.h>
 #include "tUsuario.h"
 
+#define MAX_NOME 100
+#define TAM_CRM 12
+#define TAM_DATA 11
+#define TAM_CPF 15
+#define TAM_TEL 15
+#define TAM_GEN 10
+#define MAX_USER 21
+
 struct tUsuario {
     char nomeUsuario[MAX_NOME];
     char cpf[TAM_CPF];
@@ -25,6 +33,11 @@ tUsuario * cadastraUsuario(char *nomeUsuario, char * cpfUsuario, char * dataNasc
     strcpy(usuario -> dataNascimento, dataNascimento);
     strcpy(usuario -> telefone, telefone);
     strcpy(usuario -> genero, genero);
+    if(nivelUser > 1) {
+        usuario -> crm[0] = '\0';
+    } else {
+        strcpy(usuario -> crm, crm);
+    }
     strcpy(usuario -> nomeUser, nomeUser);
     strcpy(usuario -> senhaUser, senhaUser);
     usuario -> nivelUser = nivelUser;
@@ -34,7 +47,7 @@ return usuario;
 
 
 char * ObtemNomeUsuario(tUsuario * usuario) {
-return usuario -> nomeUser;
+return usuario -> nomeUsuario;
 }
 
 

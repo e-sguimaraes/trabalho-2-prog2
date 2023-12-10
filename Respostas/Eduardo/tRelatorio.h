@@ -1,7 +1,7 @@
 #ifndef _TRELATORIO_H_
 #define _TRELATORIO_H_
 
-#define NOME_ARQUIVO_RELATORIO "relatorio.txt"
+#define NOME_ARQUIVO_RELATORIO "relatorio_geral.txt"
 
 typedef struct tRelatorio tRelatorio;
 

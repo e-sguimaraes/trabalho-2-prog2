@@ -1,15 +1,6 @@
 #ifndef _TPACIENTE_H_
 #define _TPACIENTE_H_
 
-#define MAX_NOME 100
-#define TAM_CRM 12
-#define TAM_DATA 10
-#define TAM_CPF 14
-#define TAM_TEL 14
-#define TAM_GEN 9
-#define MAX_TAM_ESPECIALIDADE 50
-#define MAX_TAM_MOTIVO 300
-
 #include "tLesao.h"
 
 typedef struct tPaciente tPaciente;
@@ -37,7 +28,7 @@ void AlteraAlergiaMedicamento(tPaciente * paciente, int valor);
 
 void AlteraHistoricoDeCancerPaciente(tPaciente * paciente, int valor);
 
-void AlteraTipoDePelePaciente(tPaciente * paciente, int valor);
+void AlteraTipoDePelePaciente(tPaciente * paciente, char * valor);
 
 int EhDiabeticoPaciente(tPaciente * paciente);
 
@@ -45,7 +36,7 @@ int EhFumantePaciente(tPaciente * paciente);
 
 int TemHistoricoDeCancerPaciente(tPaciente * paciente);
 
-int ObtemTipoPelePaciente(tPaciente * paciente);
+char * ObtemTipoPelePaciente(tPaciente * paciente);
 
 int ObtemQuantidadeLesoesPaciente(tPaciente * paciente);
 
@@ -63,6 +54,6 @@ void desalocaPaciente(tPaciente * paciente);
 
 void imprimeNaTelaPaciente(tPaciente * paciente);
 
-void imprimeEmArquivoPaciente(tPaciente * paciente, char *path);
+void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente);
 
 #endif

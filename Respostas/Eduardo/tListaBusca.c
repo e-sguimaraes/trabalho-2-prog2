@@ -26,10 +26,10 @@ void imprimeNaTelaListaBusca(void *dado) {
     int pacienteEncontrado = 0;
 
     for(int i = 0; i < lista -> qtdPacientes; i++) {
-        if(strcmp(lista -> nomeProcurado, ObtemNomePaciente(lista -> pacientes[i]))) {
+        if(!strcmp(lista -> nomeProcurado, ObtemNomePaciente(lista -> pacientes[i]))) {
+            pacienteEncontrado++;
             printf("%d - ", pacienteEncontrado);
             imprimeNaTelaPaciente(lista -> pacientes[i]);
-            pacienteEncontrado++;
         }
     }
 
@@ -41,19 +41,21 @@ void imprimeEmArquivoListaBusca(void *dado, char *path) {
 
     FILE * arqListaBusca = NULL;
 
-    char diretorioDoRelatorio[50];
-    sprintf(diretorioDoRelatorio, "%s/%s", path, NOME_ARQUIVO_LISTA_BUSCA);
-    arqListaBusca = fopen(diretorioDoRelatorio, "a");
+    char diretorioDaListaBusca[100];
+    sprintf(diretorioDaListaBusca, "%s/%s", path, NOME_ARQUIVO_LISTA_BUSCA);
+    arqListaBusca = fopen(diretorioDaListaBusca, "a");
 
     int pacienteEncontrado = 0;
 
     for(int i = 0; i < lista -> qtdPacientes; i++) {
-        if(strcmp(lista -> nomeProcurado, ObtemNomePaciente(lista -> pacientes[i]))) {
-            fprintf(arqListaBusca, "%d - ", pacienteEncontrado);
-            imprimeEmArquivoPaciente(lista -> pacientes[i], path);
+        if(!strcmp(lista -> nomeProcurado, ObtemNomePaciente(lista -> pacientes[i]))) {
             pacienteEncontrado++;
+            fprintf(arqListaBusca, "%d - ", pacienteEncontrado);
+            imprimeEmArquivoPaciente(lista -> pacientes[i], arqListaBusca);
         }
     }
+
+    fclose(arqListaBusca);
 
 }
 

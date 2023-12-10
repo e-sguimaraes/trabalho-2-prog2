@@ -3,6 +3,16 @@
 #include <string.h>
 #include "tPaciente.h"
 
+#define MAX_NOME 101
+#define TAM_CRM 13
+#define TAM_DATA 11
+#define TAM_CPF 15
+#define TAM_TEL 15
+#define TAM_GEN 10
+#define MAX_TAM_ESPECIALIDADE 51
+#define MAX_TAM_MOTIVO 301
+#define MAX_PELE 3
+
 struct tPaciente {
     char nomePaciente[MAX_NOME];
     char cpf[TAM_CPF];
@@ -14,7 +24,7 @@ struct tPaciente {
     int fumante;
     int alergiaMedicamento;
     int historicoCancer;
-    int tipoPele;
+    char tipoPele[MAX_PELE];
     tLesao ** lesoes;
     int qtdLesoes;
 };
@@ -35,7 +45,8 @@ tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * data
     paciente -> fumante = 0;
     paciente -> alergiaMedicamento = 0;
     paciente -> historicoCancer = 0;
-    paciente -> tipoPele = 0;
+    paciente -> tipoPele[0] = '\0';
+    paciente -> lesoes = (tLesao **) malloc(sizeof(tLesao *));
     paciente -> qtdLesoes = 0;
 
 return paciente;
@@ -92,8 +103,8 @@ void AlteraHistoricoDeCancerPaciente(tPaciente * paciente, int valor) {
 }
 
 
-void AlteraTipoDePelePaciente(tPaciente * paciente, int valor) {
-    paciente -> tipoPele = valor;
+void AlteraTipoDePelePaciente(tPaciente * paciente, char * valor) {
+    strcpy(paciente -> tipoPele, valor);
 }
 
 
@@ -112,7 +123,7 @@ return paciente -> historicoCancer;
 }
 
 
-int ObtemTipoPelePaciente(tPaciente * paciente) {
+char * ObtemTipoPelePaciente(tPaciente * paciente) {
 return paciente -> tipoPele;
 }
 
@@ -164,6 +175,7 @@ void adicionaLesaoPaciente(tPaciente * paciente) {
 
 
 void desalocaPaciente(tPaciente * paciente) {
+    desalocaLesao(paciente -> lesoes, paciente -> qtdLesoes);
     free(paciente);
 }
 
@@ -175,11 +187,8 @@ void imprimeNaTelaPaciente(tPaciente * paciente) {
 }
 
 
-void imprimeEmArquivoPaciente(tPaciente * paciente, char *path) {
+void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente) {
 
-    FILE * arqPaciente = NULL;
-
-    arqPaciente = fopen(path, "a");
     fprintf(arqPaciente, "%s (%s)\n", paciente -> nomePaciente, paciente -> cpf);
 
 }

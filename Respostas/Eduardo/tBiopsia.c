@@ -3,6 +3,16 @@
 #include <stdio.h>
 #include "tBiopsia.h"
 
+#define MAX_NOME 101
+#define TAM_CRM 13
+#define TAM_DATA 11
+#define TAM_CPF 15
+#define TAM_TEL 15
+#define TAM_GEN 10
+#define MAX_TAM_ESPECIALIDADE 51
+#define MAX_TAM_MOTIVO 301
+
+
 struct tBiopsia {
     char nomePaciente[MAX_NOME];
     char cpf[TAM_CPF];
@@ -32,8 +42,7 @@ tBiopsia * criaBiopsia(char *nomePaciente, char * cpfPaciente, tLesao ** lesao,
     qtdPrecisaCirurgia = 0;
     for(int i = 0; i < qtdLesoes; i++) {
         if(NecessitaCirurgiaLesao(lesao[i])) {
-            biopsia -> lesao[qtdPrecisaCirurgia] = criaLesao();
-            biopsia -> lesao[qtdPrecisaCirurgia] = lesao[i];
+            biopsia -> lesao[qtdPrecisaCirurgia] = copiaLesao(lesao[i]);
             qtdPrecisaCirurgia++;
         }
     }
@@ -43,6 +52,7 @@ tBiopsia * criaBiopsia(char *nomePaciente, char * cpfPaciente, tLesao ** lesao,
     strcpy(biopsia -> crm, crm);
     strcpy(biopsia -> data, data);
 
+return biopsia;
 }
 
 
@@ -75,7 +85,7 @@ void imprimeEmArquivoBiopsia(void *dado, char *path) {
     FILE * arqBiopsia = NULL;
     tBiopsia * biopsia = (tBiopsia *)dado;
 
-    char diretorioDaBiopsia[50];
+    char diretorioDaBiopsia[100];
     sprintf(diretorioDaBiopsia, "%s/%s", path, NOME_ARQUIVO_BIOPSIA);
     arqBiopsia = fopen(diretorioDaBiopsia, "a");
 
@@ -83,7 +93,7 @@ void imprimeEmArquivoBiopsia(void *dado, char *path) {
     fprintf(arqBiopsia, "PACIENTE: %s\n", biopsia -> nomePaciente);
     fprintf(arqBiopsia, "CPF: %s\n\n", biopsia -> cpf);
     fprintf(arqBiopsia, "SOLICITACAO DE BIOPSIA PARA AS LESOES:\n");
-    imprimeEmArquivoLesao(biopsia -> lesao, biopsia -> qtdLesoes, path);
+    imprimeEmArquivoLesao(biopsia -> lesao, biopsia -> qtdLesoes, arqBiopsia);
     fprintf(arqBiopsia, "%s (%s)\n", biopsia -> nomeMedico, biopsia -> crm);
     fprintf(arqBiopsia, "%s\n", biopsia -> data);
 

@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "trelatorio.h": "c",
+        "tbiopsia.h": "c",
+        "tlesao.h": "c",
+        "string.h": "c",
+        "treceita.h": "c",
+        "tencaminhamento.h": "c",
+        "tsistema.h": "c"
+    }
+}

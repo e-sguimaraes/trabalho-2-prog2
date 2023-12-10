@@ -7,7 +7,7 @@
 typedef struct tLesao tLesao;
 
 
-tLesao * criaLesao();
+tLesao * copiaLesao(tLesao * lesao);
 
 
 void adicionaLesao(tLesao ** lesao, int qtdLesoes);
@@ -28,6 +28,6 @@ void desalocaLesao(tLesao ** lesoes, int qtdLesoes);
 void imprimeNaTelaLesao(tLesao ** lesoes, int qtdLesoes);
 
 
-void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, char *path);
+void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao);
 
 #endif
