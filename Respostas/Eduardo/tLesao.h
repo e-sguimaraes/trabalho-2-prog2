@@ -30,4 +30,8 @@ void imprimeNaTelaLesao(tLesao ** lesoes, int qtdLesoes);
 
 void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao);
 
+void salvaBinarioLesoes(tLesao ** lesoes, int qtdLesoes, FILE * binaryLesao);
+
+tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes);
+
 #endif

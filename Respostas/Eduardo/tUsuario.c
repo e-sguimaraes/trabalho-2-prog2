@@ -1,14 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "tUsuario.h"
-
-#define MAX_NOME 100
-#define TAM_CRM 12
-#define TAM_DATA 11
-#define TAM_CPF 15
-#define TAM_TEL 15
-#define TAM_GEN 10
-#define MAX_USER 21
 
 struct tUsuario {
     char nomeUsuario[MAX_NOME];
@@ -26,7 +19,7 @@ struct tUsuario {
 tUsuario * cadastraUsuario(char *nomeUsuario, char * cpfUsuario, char * dataNascimento, char * telefone,
                            char * genero, char * crm, char * nomeUser, char * senhaUser, int nivelUser) {
 
-    tUsuario * usuario = (tUsuario *) malloc(sizeof(tUsuario));
+    tUsuario * usuario = (tUsuario *) calloc(1, sizeof(tUsuario));
 
     strcpy(usuario -> nomeUsuario, nomeUsuario);
     strcpy(usuario -> cpf, cpfUsuario);
@@ -93,4 +86,17 @@ return usuario -> nivelUser;
 
 void desalocaUsuario(tUsuario * usuario) {
     free(usuario);
+}
+
+void salvaBinarioUsuario(tUsuario * usuario, FILE * bUsuario) {
+    fwrite(usuario, sizeof(tUsuario), 1, bUsuario);
+}
+
+tUsuario * recuperaUsuario(FILE * bUsuario) {
+    
+    tUsuario * usuario = (tUsuario *) calloc(1, sizeof(tUsuario));
+
+    fread(usuario, sizeof(tUsuario), 1, bUsuario);
+
+return usuario;
 }

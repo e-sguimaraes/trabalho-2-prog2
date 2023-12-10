@@ -33,7 +33,7 @@ struct tPaciente {
 tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * dataNascimento,
                       char * telefone, char * genero, int idade) {
     
-    tPaciente * paciente = (tPaciente *) malloc(sizeof(tPaciente));
+    tPaciente * paciente = (tPaciente *) calloc(1, sizeof(tPaciente));
 
     strcpy(paciente -> nomePaciente, nomePaciente);
     strcpy(paciente -> cpf, cpfPaciente);
@@ -46,7 +46,7 @@ tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * data
     paciente -> alergiaMedicamento = 0;
     paciente -> historicoCancer = 0;
     paciente -> tipoPele[0] = '\0';
-    paciente -> lesoes = (tLesao **) malloc(sizeof(tLesao *));
+    paciente -> lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
     paciente -> qtdLesoes = 0;
 
 return paciente;
@@ -191,4 +191,21 @@ void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente) {
 
     fprintf(arqPaciente, "%s (%s)\n", paciente -> nomePaciente, paciente -> cpf);
 
+}
+
+void salvaBinarioPaciente(tPaciente * paciente, FILE * bUsuario) {
+    fwrite(paciente, sizeof(tPaciente), 1, bUsuario);
+
+    salvaBinarioLesoes(paciente -> lesoes, paciente -> qtdLesoes, bUsuario);
+}
+
+tPaciente * recuperaPaciente(FILE * bUsuario) {
+    
+    tPaciente * paciente = (tPaciente *) calloc(1, sizeof(tPaciente));
+
+    fread(paciente, sizeof(tPaciente), 1, bUsuario);
+
+    if(paciente -> qtdLesoes) paciente -> lesoes = recuperaLesoes(bUsuario, paciente -> qtdLesoes);
+
+return paciente;
 }

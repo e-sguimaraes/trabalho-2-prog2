@@ -5,7 +5,7 @@
 
 int main(int argc, char * argv[]) {
 
-    char diretorioGeral[1001], binaryPath[1001];
+    char diretorioGeral[1001], binaryPath[1001], newBinaryPath[1002];
 
     scanf("%s%*c", binaryPath);
 
@@ -15,8 +15,9 @@ int main(int argc, char * argv[]) {
     }
 
     sprintf(diretorioGeral, "%s/saida", argv[1]);
+    sprintf(newBinaryPath, "%s/%s", argv[1], binaryPath);
 
-    tSistema * sistema = criaSistema();
+    tSistema * sistema = criaSistema(newBinaryPath);
     int opcao = 0;
 
     tUsuario * logado = fazLogin(sistema);
@@ -70,7 +71,7 @@ int main(int argc, char * argv[]) {
         }
     }
 
-    finalizaSistema(sistema);
+    finalizaSistema(sistema, newBinaryPath);
 
 return 0;
 }

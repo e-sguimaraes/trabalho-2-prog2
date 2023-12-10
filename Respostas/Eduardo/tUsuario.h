@@ -42,4 +42,8 @@ int ObtemNivelUser(tUsuario * usuario);
  */
 void desalocaUsuario(tUsuario * usuario);
 
+void salvaBinarioUsuario(tUsuario * usuario, FILE * bUsuario);
+
+tUsuario * recuperaUsuario(FILE * bUsuario);
+
 #endif

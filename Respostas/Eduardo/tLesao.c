@@ -20,7 +20,7 @@ struct tLesao {
 
 tLesao * copiaLesao(tLesao * src) {
 
-    tLesao * dest = (tLesao *) malloc(sizeof(tLesao));
+    tLesao * dest = (tLesao *) calloc(1, sizeof(tLesao));
     strcpy(dest -> rotulo, src -> rotulo);
     strcpy(dest -> diagnostico, src -> diagnostico);
     strcpy(dest -> regiao, src -> regiao);
@@ -33,7 +33,7 @@ return dest;
 
 void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
 
-    tLesao * lesao = (tLesao *) malloc(sizeof(tLesao));
+    tLesao * lesao = (tLesao *) calloc(1, sizeof(tLesao));
 
     sprintf(lesao -> rotulo, "L%d", qtdLesoes);
 
@@ -100,4 +100,23 @@ void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao) {
                                                       lesoes[i] -> diagnostico, lesoes[i] -> regiao, lesoes[i] -> tamanho);
     }
 
+}
+
+void salvaBinarioLesoes(tLesao ** lesoes, int qtdLesoes, FILE * binaryLesao) {
+    for(int i = 0; i < qtdLesoes; i++) {
+        fwrite(lesoes[i], sizeof(tLesao), 1, binaryLesao);
+    }
+}
+
+tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes) {
+
+    tLesao ** lesoes = (tLesao **) calloc(qtdLesoes, sizeof(tLesao *));
+
+    for(int i = 0; i < qtdLesoes; i++) {
+        tLesao * lesao = (tLesao *) calloc(1, sizeof(tLesao));
+        fread(lesao, sizeof(tLesao), 1, binaryLesao);
+        lesoes[i] = lesao;
+    }
+
+return lesoes;
 }

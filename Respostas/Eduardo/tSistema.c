@@ -25,21 +25,58 @@ struct tSistema {
 };
 
 
-tSistema * criaSistema() {
+tSistema * criaSistema(char * binaryPath) {
 
     tSistema * sistema = (tSistema *) malloc(sizeof(tSistema));
-    
-    sistema -> usuarios = (tUsuario **) malloc(sizeof(tUsuario *));
 
-    sistema -> pacientes = (tPaciente **) malloc(sizeof(tPaciente *));
+    sistema -> usuarios = (tUsuario **) calloc(1, sizeof(tUsuario *));
+
+    sistema -> pacientes = (tPaciente **) calloc(1, sizeof(tPaciente *));
 
     sistema -> fila = criaFila();
 
-    sistema -> qtdUsuarios = 0;
-    sistema -> qtdPacientes = 0;
-    sistema -> qtdAtendidos = 0;
+    //Lendo os pacientes do arquivo binário;
+    char binaryPacientes[1003];
+    sprintf(binaryPacientes, "%s/pacientes.bin", binaryPath);
 
-    adicionaPessoaSistema(sistema, 2); 
+    FILE * bPacientes = NULL;
+    bPacientes = fopen(binaryPacientes, "rb");
+    if(bPacientes != NULL) {
+        fread(&sistema -> qtdPacientes, sizeof(int), 1, bPacientes);
+        sistema -> pacientes = (tPaciente **) realloc(sistema -> pacientes, sistema -> qtdPacientes * sizeof(tPaciente *));
+
+        for(int i = 0; i < sistema -> qtdPacientes; i++) {
+            sistema -> pacientes[i] = recuperaPaciente(bPacientes);
+        }
+
+        fclose(bPacientes);
+    }
+    else {
+            sistema -> qtdPacientes = 0;
+    }
+
+    //Lendo os usuários do arquivo binário;
+    char binaryUsuarios[1003];
+    sprintf(binaryUsuarios, "%s/usuarios.bin", binaryPath);
+
+    FILE * bUsuarios = NULL;
+    bUsuarios = fopen(binaryUsuarios, "rb");
+    if(bUsuarios != NULL) {
+        fread(&sistema -> qtdUsuarios, sizeof(int), 1, bUsuarios);
+        sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
+
+        for(int i = 0; i < sistema -> qtdUsuarios; i++) {
+            sistema -> usuarios[i] = recuperaUsuario(bUsuarios);
+        }
+
+        fclose(bUsuarios);
+    }
+    else {
+            sistema -> qtdUsuarios = 0;
+            adicionaPessoaSistema(sistema, 2); 
+    }
+
+    sistema -> qtdAtendidos = 0;
     
 return sistema;
 }
@@ -298,6 +335,8 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
 
             if(nivelAcesso[0] == 'A') nivelUser = 3;
 
+            nomeUsuario[0] = '\0';
+
             sistema -> usuarios[(sistema -> qtdUsuarios) - 1] = cadastraUsuario(nomeUsuario, cpf, dataNascimento, telefone, 
                                                                                 genero, crm, nomeUser, senhaUser, nivelUser);
 
@@ -459,7 +498,33 @@ void executaFilaDeImpressao(tSistema * sistema, char * path) {
 }
 
 
-void finalizaSistema(tSistema * sistema) {
+void finalizaSistema(tSistema * sistema, char * binaryPath) {
+
+    char binaryPacientes[1002], binaryUsuarios[1002];
+
+    sprintf(binaryUsuarios, "%s/usuarios.bin", binaryPath);
+    FILE * bUsuarios = NULL;
+    bUsuarios = fopen(binaryUsuarios, "wb");
+
+    fwrite(&sistema -> qtdUsuarios, sizeof(int), 1, bUsuarios);
+
+    for(int i = 0; i < sistema -> qtdUsuarios; i++) {
+        salvaBinarioUsuario(sistema -> usuarios[i], bUsuarios);
+    }
+
+    fclose(bUsuarios);
+
+    sprintf(binaryPacientes, "%s/pacientes.bin", binaryPath);
+    FILE * bPacientes = NULL;
+    bPacientes = fopen(binaryPacientes, "wb");
+
+    fwrite(&sistema -> qtdPacientes, sizeof(int), 1, bPacientes);
+
+    for(int i = 0; i < sistema -> qtdPacientes; i++) {
+        salvaBinarioPaciente(sistema -> pacientes[i], bPacientes);
+    }
+
+    fclose(bPacientes);
 
     for(int i = 0; i < sistema -> qtdUsuarios; i++) {
         desalocaUsuario(sistema -> usuarios[i]);

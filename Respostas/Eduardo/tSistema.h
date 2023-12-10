@@ -9,7 +9,7 @@ typedef struct tSistema tSistema;
  * Função que recebe todas as informações pertinentes a um sistema e retorna
  * um ponteiro com o sistema criado.
  */
-tSistema * criaSistema();
+tSistema * criaSistema(char * binaryPath);
 
 void adicionaPessoaSistema(tSistema * sistema, int nivelUser);
 
@@ -21,7 +21,7 @@ void relatorioGeralSistema(tSistema * sistema);
 
 void executaFilaDeImpressao(tSistema * sistema, char * path);
 
-void finalizaSistema(tSistema * sistema);
+void finalizaSistema(tSistema * sistema, char * binaryPath);
 
 int obtemAtendidos(tSistema * sistema);
 
