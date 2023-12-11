@@ -205,7 +205,8 @@ tPaciente * recuperaPaciente(FILE * bUsuario) {
 
     fread(paciente, sizeof(tPaciente), 1, bUsuario);
 
-    if(paciente -> qtdLesoes) paciente -> lesoes = recuperaLesoes(bUsuario, paciente -> qtdLesoes);
+    paciente -> lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
+    paciente -> qtdLesoes = 0;
 
 return paciente;
 }

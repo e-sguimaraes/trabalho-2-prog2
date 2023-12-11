@@ -3,9 +3,9 @@
 #include <string.h>
 #include "tLesao.h"
 
-#define TAM_ROTULO 5
-#define TAM_DIAGNO 23
-#define TAM_REGIAO 14
+#define TAM_ROTULO 6
+#define TAM_DIAGNO 24
+#define TAM_REGIAO 15
 
 
 struct tLesao {
@@ -40,9 +40,9 @@ void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
     printf("#################### CONSULTA MEDICA #######################\n");
     printf("CADASTRO DE LESAO:\n");
     printf("DIAGNOSTICO CLINICO: ");
-    scanf("%s%*c", lesao -> diagnostico);
+    scanf("%[^\n]%*c", lesao -> diagnostico);
     printf("REGIAO DO CORPO: ");
-    scanf("%s%*c", lesao -> regiao);
+    scanf("%[^\n]%*c", lesao -> regiao);
     printf("TAMANHO: ");
     scanf("%d%*c", &lesao -> tamanho);
     printf("ENVIO PARA CIRURGIA: ");
@@ -116,6 +116,7 @@ tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes) {
         tLesao * lesao = (tLesao *) calloc(1, sizeof(tLesao));
         fread(lesao, sizeof(tLesao), 1, binaryLesao);
         lesoes[i] = lesao;
+        imprimeNaTelaLesao(lesoes, qtdLesoes);
     }
 
 return lesoes;

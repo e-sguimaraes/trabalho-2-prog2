@@ -83,10 +83,6 @@ return sistema;
 
 void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, char * crm, int nivelUser) {
 
-    char conserta = nomeUsuario[0];
-
-    if(nivelUser > 1) nomeUsuario[0] = '\0';
-
     printf("---\n");
     printf("- NOME: %s\n", ObtemNomePaciente(paciente));
     printf("- DATA DE NASCIMENTO: %s\n", ObtemNascimentoPaciente(paciente));
@@ -232,8 +228,6 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
                 
         }
     }
-
-    nomeUsuario[0] = conserta;
     
 }
 
