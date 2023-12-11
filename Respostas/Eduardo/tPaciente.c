@@ -206,7 +206,7 @@ tPaciente * recuperaPaciente(FILE * bUsuario) {
 
     tLesao ** lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
     paciente -> lesoes = lesoes;
-
+    paciente -> qtdLesoes = 0;
 
 return paciente;
 }

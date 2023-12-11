@@ -558,11 +558,8 @@ void finalizaSistema(tSistema * sistema, char * binaryPath) {
     }
     fwrite(&sistema -> qtdLesoes, sizeof(int), 1, bLesoes);
 
-    for(int i = 0; i < qtdAntigaLesoes; i++) {
-        salvaBinarioLesoes(sistema -> lesoes, sistema -> qtdLesoes, bLesoes);
-        desalocaLesao(sistema -> lesoes, sistema -> qtdLesoes);
-    }
-    free(sistema -> lesoes);
+    salvaBinarioLesoes(sistema -> lesoes, qtdAntigaLesoes, bLesoes);
+    desalocaLesao(sistema -> lesoes, qtdAntigaLesoes);
 
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         salvaBinarioLesoes(ObtemLesoesPaciente(sistema -> pacientes[i]), ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]), bLesoes);

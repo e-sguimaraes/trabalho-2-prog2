@@ -6,6 +6,7 @@
         "string.h": "c",
         "treceita.h": "c",
         "tencaminhamento.h": "c",
-        "tsistema.h": "c"
+        "tsistema.h": "c",
+        "stdio.h": "c"
     }
 }
