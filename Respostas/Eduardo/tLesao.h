@@ -10,7 +10,7 @@ typedef struct tLesao tLesao;
 tLesao * copiaLesao(tLesao * lesao);
 
 
-void adicionaLesao(tLesao ** lesao, int qtdLesoes);
+tLesao ** adicionaLesao(tLesao ** lesao, int qtdLesoes);
 
 
 int NecessitaCirurgiaLesao(tLesao * lesao);
@@ -33,5 +33,7 @@ void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao);
 void salvaBinarioLesoes(tLesao ** lesoes, int qtdLesoes, FILE * binaryLesao);
 
 tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes);
+
+tLesao * recuperaLesao(FILE * binaryLesao);
 
 #endif

@@ -46,7 +46,7 @@ tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * data
     paciente -> alergiaMedicamento = 0;
     paciente -> historicoCancer = 0;
     paciente -> tipoPele[0] = '\0';
-    paciente -> lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
+    paciente -> lesoes = (tLesao **) malloc(sizeof(tLesao *));
     paciente -> qtdLesoes = 0;
 
 return paciente;
@@ -169,7 +169,7 @@ return ObtemTamanhoLesao(paciente -> lesoes[indice]);
 void adicionaLesaoPaciente(tPaciente * paciente) {
 
     paciente -> qtdLesoes++;
-    adicionaLesao(paciente -> lesoes, paciente -> qtdLesoes);
+    paciente -> lesoes = adicionaLesao(paciente -> lesoes, paciente -> qtdLesoes);
 
 }
 
@@ -196,7 +196,6 @@ void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente) {
 void salvaBinarioPaciente(tPaciente * paciente, FILE * bUsuario) {
     fwrite(paciente, sizeof(tPaciente), 1, bUsuario);
 
-    salvaBinarioLesoes(paciente -> lesoes, paciente -> qtdLesoes, bUsuario);
 }
 
 tPaciente * recuperaPaciente(FILE * bUsuario) {
@@ -205,8 +204,9 @@ tPaciente * recuperaPaciente(FILE * bUsuario) {
 
     fread(paciente, sizeof(tPaciente), 1, bUsuario);
 
-    paciente -> lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
-    paciente -> qtdLesoes = 0;
+    tLesao ** lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
+    paciente -> lesoes = lesoes;
+
 
 return paciente;
 }

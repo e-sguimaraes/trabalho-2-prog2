@@ -31,7 +31,36 @@ tLesao * copiaLesao(tLesao * src) {
 return dest;
 }
 
-void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
+
+void desalocaLesao(tLesao ** lesoes, int qtdLesoes) {
+
+    for(int i = 0; i < qtdLesoes; i++) {
+        free(lesoes[i]);
+    }
+    free(lesoes);
+
+}
+
+
+tLesao ** copiaLesoes(tLesao ** lesoes, tLesao * lesaoNova, int qtdLesoes) {
+    
+    tLesao ** lesoesNova = (tLesao **) malloc(qtdLesoes * sizeof(tLesao *));
+
+    for(int i = 0; i < qtdLesoes - 1; i++) {
+        lesoesNova[i] = copiaLesao(lesoes[i]);
+    }
+
+    lesoesNova[qtdLesoes - 1] = copiaLesao(lesaoNova);
+
+    desalocaLesao(lesoes, qtdLesoes - 1);
+
+    free(lesaoNova);
+
+return lesoesNova;
+}
+
+
+tLesao ** adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
 
     tLesao * lesao = (tLesao *) calloc(1, sizeof(tLesao));
 
@@ -50,14 +79,12 @@ void adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
     printf("ENVIO PARA CRIOTERAPIA: ");
     scanf("%d%*c", &lesao -> necessitaCrioterapia);
 
-    if(qtdLesoes > 1) lesoes = (tLesao **) realloc(lesoes, qtdLesoes * sizeof(tLesao *));
-    lesoes[qtdLesoes - 1] = lesao;
-
     printf("LESAO REGISTRADA COM SUCESSO. PRESSIONE QUALQUER TECLA PARA RETORNAR AO MENU ANTERIOR\n");
     printf("############################################################");
 
     scanf("%*c");
 
+return copiaLesoes(lesoes, lesao, qtdLesoes);
 }
 
 int NecessitaCirurgiaLesao(tLesao * lesao) {
@@ -70,16 +97,6 @@ return lesao -> necessitaCrioterapia;
 
 int ObtemTamanhoLesao(tLesao * lesao) {
 return lesao -> tamanho;
-}
-
-
-void desalocaLesao(tLesao ** lesoes, int qtdLesoes) {
-
-    for(int i = 0; i < qtdLesoes; i++) {
-        free(lesoes[i]);
-    }
-    free(lesoes);
-
 }
 
 
@@ -108,6 +125,10 @@ void salvaBinarioLesoes(tLesao ** lesoes, int qtdLesoes, FILE * binaryLesao) {
     }
 }
 
+void salvaBinarioLesao(tLesao * lesao, FILE * binaryLesao) {
+    fwrite(lesao, sizeof(tLesao), 1, binaryLesao);
+}
+
 tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes) {
 
     tLesao ** lesoes = (tLesao **) calloc(qtdLesoes, sizeof(tLesao *));
@@ -116,8 +137,16 @@ tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes) {
         tLesao * lesao = (tLesao *) calloc(1, sizeof(tLesao));
         fread(lesao, sizeof(tLesao), 1, binaryLesao);
         lesoes[i] = lesao;
-        imprimeNaTelaLesao(lesoes, qtdLesoes);
     }
 
 return lesoes;
+}
+
+tLesao * recuperaLesao(FILE * binaryLesao) {
+    
+    tLesao * lesao = (tLesao *) calloc(1, sizeof(tLesao));
+
+    fread(lesao, sizeof(tLesao), 1, binaryLesao);
+
+return lesao;
 }

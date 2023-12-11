@@ -18,10 +18,12 @@
 struct tSistema {
     tUsuario ** usuarios;
     tPaciente ** pacientes;
-    tFila * fila;
+    tLesao ** lesoes;
     int qtdUsuarios;
     int qtdPacientes;
     int qtdAtendidos;
+    int qtdLesoes;
+    tFila * fila;
 };
 
 
@@ -33,7 +35,30 @@ tSistema * criaSistema(char * binaryPath) {
 
     sistema -> pacientes = (tPaciente **) calloc(1, sizeof(tPaciente *));
 
+    sistema -> lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
+
     sistema -> fila = criaFila();
+
+    //Lendo as lesões do arquivo binário;
+    char binaryLesoes[1003];
+    sprintf(binaryLesoes, "%s/lesoes.bin", binaryPath);
+
+    FILE * bLesoes = NULL;
+    bLesoes = fopen(binaryLesoes, "rb");
+    if(bLesoes != NULL) {
+        fread(&sistema -> qtdLesoes, sizeof(int), 1, bLesoes);
+        printf("%d\n", sistema -> qtdLesoes);
+        sistema -> lesoes = (tLesao **) realloc(sistema -> lesoes, sistema -> qtdLesoes * sizeof(tLesao *));
+
+        for(int i = 0; i < sistema -> qtdLesoes; i++) {
+            sistema -> lesoes[i] = recuperaLesao(bLesoes);
+        }
+
+        fclose(bLesoes);
+    }
+    else {
+            sistema -> qtdLesoes = 0;
+    }
 
     //Lendo os pacientes do arquivo binário;
     char binaryPacientes[1003];
@@ -89,6 +114,7 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
     printf("---\n");
 
     char dataConsulta[TAM_DATA];
+    int dia, mes, ano;
     int diabetes;
     int fumante;
     int alergia;
@@ -96,7 +122,7 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
     char tipoPele[3];
 
     printf("DATA DA CONSULTA: ");
-    scanf("%s%*c", dataConsulta);
+    scanf("%d/%d/%d%*c", &dia, &mes, &ano);
     printf("POSSUI DIABETES: ");
     scanf("%d%*c", &diabetes);
     printf("FUMANTE: ");
@@ -107,6 +133,8 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
     scanf("%d%*c", &historicoDeCancer);
     printf("TIPO DE PELE: ");
     scanf("%[^\n]%*c", tipoPele);
+
+    sprintf(dataConsulta, "%d/%d/%d", dia, mes, ano);
 
     AlteraDiabetePaciente(paciente, diabetes);
     AlteraFumantePaciente(paciente, fumante);
@@ -249,8 +277,6 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
     switch (nivelUser) {
 
         case 0:
-            sistema -> qtdPacientes++;
-            if(sistema -> qtdPacientes > 1) sistema -> pacientes = (tPaciente **) realloc(sistema -> pacientes, sistema -> qtdPacientes * sizeof(tPaciente *));
 
             printf("#################### CADASTRO PACIENTE #######################\n");
             printf("NOME COMPLETO: ");
@@ -273,13 +299,20 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
                 idade = ANO_ATUAL - ano - 1;
             }
 
+            for(int i = 0; i < sistema -> qtdPacientes; i++) {
+                if(!strcmp(ObtemCPFPaciente(sistema -> pacientes[i]), cpf)) {
+                    printf("CPF JÁ CADASTRADO FILHO DA PUTA\n");
+                    return;
+                }
+            }
+
+            sistema -> qtdPacientes++;
+            if(sistema -> qtdPacientes > 1) sistema -> pacientes = (tPaciente **) realloc(sistema -> pacientes, sistema -> qtdPacientes * sizeof(tPaciente *));
             sistema -> pacientes[(sistema -> qtdPacientes) - 1] = cadastraPaciente(nomePaciente, cpf, dataNascimento, telefone, genero, idade);
             break;
 
         case 1:
 
-            sistema -> qtdUsuarios++;
-            if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
 
             printf("#################### CADASTRO MEDICO #######################\n");
             printf("NOME COMPLETO: ");
@@ -299,6 +332,15 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
             printf("SENHA: ");
             scanf("%s%*c", senhaUser);
 
+            for(int i = 0; i < sistema -> qtdUsuarios; i++) {
+                if(!strcmp(ObtemCPFUsuario(sistema -> usuarios[i]), cpf)) {
+                    printf("CPF JÁ CADASTRADO FILHO DA PUTA\n");
+                    return;
+                }
+            }
+
+            sistema -> qtdUsuarios++;
+            if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
             sistema -> usuarios[(sistema -> qtdUsuarios) - 1] = cadastraUsuario(nomeUsuario, cpf, dataNascimento, telefone, 
                                                                                 genero, crm, nomeUser, senhaUser, nivelUser);
 
@@ -306,8 +348,6 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
 
         case 2:
 
-            sistema -> qtdUsuarios++;
-            if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
 
             printf("#################### CADASTRO SECRETARIO #######################\n");
             printf("NOME COMPLETO: ");
@@ -327,10 +367,19 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
             printf("NIVEL DE ACESSO: ");
             scanf("%s%*c", nivelAcesso);
 
+            for(int i = 0; i < sistema -> qtdUsuarios; i++) {
+                if(!strcmp(ObtemCPFUsuario(sistema -> usuarios[i]), cpf)) {
+                    printf("CPF JÁ CADASTRADO FILHO DA PUTA\n");
+                    return;
+                }
+            }
+
             if(nivelAcesso[0] == 'A') nivelUser = 3;
 
             nomeUsuario[0] = '\0';
 
+            sistema -> qtdUsuarios++;
+            if(sistema -> qtdUsuarios > 1) sistema -> usuarios = (tUsuario **) realloc(sistema -> usuarios, sistema -> qtdUsuarios * sizeof(tUsuario *));
             sistema -> usuarios[(sistema -> qtdUsuarios) - 1] = cadastraUsuario(nomeUsuario, cpf, dataNascimento, telefone, 
                                                                                 genero, crm, nomeUser, senhaUser, nivelUser);
 
@@ -450,6 +499,8 @@ void relatorioGeralSistema(tSistema * sistema) {
         crioterapiaLesoes += ObtemQtdLesoesCrioterapia(sistema -> pacientes[i]);
     }
 
+    if(!nLesoes) nLesoes = 1;
+
     idadeMedia /= sistema -> qtdPacientes;
     tamMedioLesoes /= nLesoes;
 
@@ -494,7 +545,30 @@ void executaFilaDeImpressao(tSistema * sistema, char * path) {
 
 void finalizaSistema(tSistema * sistema, char * binaryPath) {
 
-    char binaryPacientes[1002], binaryUsuarios[1002];
+    char binaryPacientes[1002], binaryUsuarios[1002], binaryLesoes[1002];
+
+    sprintf(binaryLesoes, "%s/lesoes.bin", binaryPath);
+    FILE * bLesoes = NULL;
+    bLesoes = fopen(binaryLesoes, "wb");
+
+    int qtdAntigaLesoes = sistema -> qtdLesoes;
+
+    for(int i = 0; i < sistema -> qtdPacientes; i++) {
+        sistema -> qtdLesoes += ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]);
+    }
+    fwrite(&sistema -> qtdLesoes, sizeof(int), 1, bLesoes);
+
+    for(int i = 0; i < qtdAntigaLesoes; i++) {
+        salvaBinarioLesoes(sistema -> lesoes, sistema -> qtdLesoes, bLesoes);
+        desalocaLesao(sistema -> lesoes, sistema -> qtdLesoes);
+    }
+    free(sistema -> lesoes);
+
+    for(int i = 0; i < sistema -> qtdPacientes; i++) {
+        salvaBinarioLesoes(ObtemLesoesPaciente(sistema -> pacientes[i]), ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]), bLesoes);
+    }
+
+    fclose(bLesoes);
 
     sprintf(binaryUsuarios, "%s/usuarios.bin", binaryPath);
     FILE * bUsuarios = NULL;
@@ -504,9 +578,10 @@ void finalizaSistema(tSistema * sistema, char * binaryPath) {
 
     for(int i = 0; i < sistema -> qtdUsuarios; i++) {
         salvaBinarioUsuario(sistema -> usuarios[i], bUsuarios);
+        desalocaUsuario(sistema -> usuarios[i]);
     }
-
     fclose(bUsuarios);
+    free(sistema -> usuarios);
 
     sprintf(binaryPacientes, "%s/pacientes.bin", binaryPath);
     FILE * bPacientes = NULL;
@@ -516,18 +591,9 @@ void finalizaSistema(tSistema * sistema, char * binaryPath) {
 
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         salvaBinarioPaciente(sistema -> pacientes[i], bPacientes);
-    }
-
-    fclose(bPacientes);
-
-    for(int i = 0; i < sistema -> qtdUsuarios; i++) {
-        desalocaUsuario(sistema -> usuarios[i]);
-    }
-    free(sistema -> usuarios);
-
-    for(int i = 0; i < sistema -> qtdPacientes; i++) {
         desalocaPaciente(sistema -> pacientes[i]);
     }
+    fclose(bPacientes);
     free(sistema -> pacientes);
 
     desalocaFila(sistema -> fila);
