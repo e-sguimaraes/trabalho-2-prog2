@@ -23,8 +23,6 @@ void executaFilaDeImpressao(tSistema * sistema, char * path);
 
 void finalizaSistema(tSistema * sistema, char * binaryPath);
 
-int obtemAtendidos(tSistema * sistema);
-
 int obtemQtdPacientes(tSistema * sistema);
 
 tUsuario * fazLogin(tSistema * sistema);

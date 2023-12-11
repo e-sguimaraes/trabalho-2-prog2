@@ -21,7 +21,6 @@ struct tSistema {
     tLesao ** lesoes;
     int qtdUsuarios;
     int qtdPacientes;
-    int qtdAtendidos;
     int qtdLesoes;
     tFila * fila;
 };
@@ -100,8 +99,6 @@ tSistema * criaSistema(char * binaryPath) {
             sistema -> qtdUsuarios = 0;
             adicionaPessoaSistema(sistema, 2); 
     }
-
-    sistema -> qtdAtendidos = 0;
     
 return sistema;
 }
@@ -256,6 +253,8 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
                 
         }
     }
+
+    foiAtendidoPaciente(paciente);
     
 }
 
@@ -408,7 +407,6 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         if(!strcmp(cpfConsultado, ObtemCPFPaciente(sistema -> pacientes[i]))) {
             consultaPaciente(sistema -> fila, sistema -> pacientes[i], ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), ObtemNivelUser(usuario));
-            sistema -> qtdAtendidos++;
             cpfEncontrado = 1;
         }
     }
@@ -480,12 +478,19 @@ void buscaPacienteSistema(tSistema * sistema) {
 
 void relatorioGeralSistema(tSistema * sistema) {
 
-    int idadeMedia = 0, f = 0, m = 0, o = 0, tamMedioLesoes = 0, nLesoes = 0, cirurgiaLesoes = 0, crioterapiaLesoes = 0;
+    int idadeMedia = 0, f = 0, m = 0, o = 0, tamMedioLesoes = 0, nLesoes = sistema -> qtdLesoes, cirurgiaLesoes = 0, crioterapiaLesoes = 0, qtdAtendidos = 0;
+
+    for(int i = 0; i < sistema -> qtdLesoes; i++) {
+        cirurgiaLesoes += NecessitaCirurgiaLesao(sistema -> lesoes[i]);
+        crioterapiaLesoes += NecessitaCrioterapiaLesao(sistema -> lesoes[i]);
+        tamMedioLesoes += ObtemTamanhoLesao(sistema -> lesoes[i]);
+    }
 
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] == 'F') f++;
         if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] == 'M') m++;
         if(ObtemGeneroPaciente(sistema -> pacientes[i])[0] == 'O') o++;
+        if(ObtemAtendidoPaciente(sistema -> pacientes[i])) qtdAtendidos++;
 
         nLesoes += ObtemQuantidadeLesoesPaciente(sistema -> pacientes[i]);
     
@@ -505,7 +510,7 @@ void relatorioGeralSistema(tSistema * sistema) {
     tamMedioLesoes /= nLesoes;
 
 
-    tRelatorio * relatorio = criaRelatorio(sistema -> qtdAtendidos, idadeMedia, f, m, o, tamMedioLesoes, nLesoes, cirurgiaLesoes, crioterapiaLesoes);
+    tRelatorio * relatorio = criaRelatorio(qtdAtendidos, idadeMedia, f, m, o, tamMedioLesoes, nLesoes, cirurgiaLesoes, crioterapiaLesoes);
 
     imprimeNaTelaRelatorio(relatorio);
 
@@ -616,11 +621,6 @@ tUsuario * fazLogin(tSistema * sistema) {
 
         printf("USUÁRIO OU SENHA INCORRETA\n");
     }
-}
-
-
-int obtemAtendidosSistema(tSistema * sistema) {
-return sistema -> qtdAtendidos;
 }
 
 

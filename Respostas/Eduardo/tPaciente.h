@@ -56,8 +56,12 @@ void imprimeNaTelaPaciente(tPaciente * paciente);
 
 void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente);
 
-void salvaBinarioPaciente(tPaciente * paciente, FILE * bUsuario);
+void salvaBinarioPaciente(tPaciente * paciente, FILE * bPaciente);
 
-tPaciente * recuperaPaciente(FILE * bUsuario);
+tPaciente * recuperaPaciente(FILE * bPaciente);
+
+void foiAtendidoPaciente(tPaciente * paciente);
+
+int ObtemAtendidoPaciente(tPaciente * paciente);
 
 #endif

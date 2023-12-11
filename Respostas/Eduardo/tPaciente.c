@@ -27,6 +27,7 @@ struct tPaciente {
     char tipoPele[MAX_PELE];
     tLesao ** lesoes;
     int qtdLesoes;
+    int jaFoiAtendido;
 };
 
 
@@ -48,6 +49,7 @@ tPaciente * cadastraPaciente(char *nomePaciente, char * cpfPaciente, char * data
     paciente -> tipoPele[0] = '\0';
     paciente -> lesoes = (tLesao **) malloc(sizeof(tLesao *));
     paciente -> qtdLesoes = 0;
+    paciente -> jaFoiAtendido = 0;
 
 return paciente;
 }
@@ -193,20 +195,28 @@ void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente) {
 
 }
 
-void salvaBinarioPaciente(tPaciente * paciente, FILE * bUsuario) {
-    fwrite(paciente, sizeof(tPaciente), 1, bUsuario);
+void salvaBinarioPaciente(tPaciente * paciente, FILE * bPaciente) {
+    fwrite(paciente, sizeof(tPaciente), 1, bPaciente);
 
 }
 
-tPaciente * recuperaPaciente(FILE * bUsuario) {
+tPaciente * recuperaPaciente(FILE * bPaciente) {
     
     tPaciente * paciente = (tPaciente *) calloc(1, sizeof(tPaciente));
 
-    fread(paciente, sizeof(tPaciente), 1, bUsuario);
+    fread(paciente, sizeof(tPaciente), 1, bPaciente);
 
     tLesao ** lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
     paciente -> lesoes = lesoes;
     paciente -> qtdLesoes = 0;
 
 return paciente;
+}
+
+void foiAtendidoPaciente(tPaciente * paciente) {
+    paciente -> jaFoiAtendido = 1;
+}
+
+int ObtemAtendidoPaciente(tPaciente * paciente) {
+return paciente -> jaFoiAtendido;
 }
