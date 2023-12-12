@@ -7,6 +7,7 @@ int main(int argc, char * argv[]) {
 
     char diretorioGeral[1001], binaryPath[1001], newBinaryPath[1002];
 
+    printf("INFORME O CAMINHO DO BANCO DE DADOS: ");
     scanf("%s%*c", binaryPath);
 
     if(argc <= 1) {
@@ -26,10 +27,10 @@ int main(int argc, char * argv[]) {
 
         printf("####################### MENU PRINCIPAL #########################\n");
         printf("ESCOLHA UMA OPCAO:\n");
-        printf("\t(1) CADASTRAR SECRETARIO\n");
-        printf("\t(2) CADASTRAR MEDICO\n");
-        printf("\t(3) CADASTRAR PACIENTE\n");
-        printf("\t(4) REALIZAR CONSULTA\n");
+        if(ObtemNivelUser(logado) > 2) printf("\t(1) CADASTRAR SECRETARIO\n");
+        if(ObtemNivelUser(logado) > 1) printf("\t(2) CADASTRAR MEDICO\n");
+        if(ObtemNivelUser(logado) > 1) printf("\t(3) CADASTRAR PACIENTE\n");
+        if(ObtemNivelUser(logado) == 1 || ObtemNivelUser(logado) == 3) printf("\t(4) REALIZAR CONSULTA\n");
         printf("\t(5) BUSCAR PACIENTES\n");
         printf("\t(6) RELATORIO GERAL\n");
         printf("\t(7) FILA DE IMPRESSAO\n");
@@ -41,18 +42,34 @@ int main(int argc, char * argv[]) {
         switch (opcao) {
 
             case 1:
+                if(ObtemNivelUser(logado) != 3) {
+                    printf("\nACESSO NEGADO!\n");
+                    break;
+                }
                 adicionaPessoaSistema(sistema, 2);
                 break;
 
             case 2:
+                if(ObtemNivelUser(logado) == 1) {
+                    printf("\nACESSO NEGADO!\n");
+                    break;
+                }
                 adicionaPessoaSistema(sistema, 1);
                 break;
 
             case 3:
+                if(ObtemNivelUser(logado) == 1) {
+                    printf("\nACESSO NEGADO!\n");
+                    break;
+                }
                 adicionaPessoaSistema(sistema, 0);
                 break;
 
             case 4:
+                if(ObtemNivelUser(logado) == 2) {
+                    printf("\nACESSO NEGADO!\n");
+                    break;
+                }
                 executaConsulta(sistema, logado);
                 break;
 

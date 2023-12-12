@@ -21,12 +21,13 @@ int NecessitaCrioterapiaLesao(tLesao * lesao);
 
 int ObtemTamanhoLesao(tLesao * lesao);
 
-
+/**
+ * Função que recebe um ponteiro de ponteiro para lesões, bem como sua quantidade e
+ * desaloca TODAS as lesões 
+ */
 void desalocaLesao(tLesao ** lesoes, int qtdLesoes);
 
-
 void imprimeNaTelaLesao(tLesao ** lesoes, int qtdLesoes);
-
 
 void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao);
 

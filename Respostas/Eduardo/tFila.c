@@ -64,6 +64,6 @@ void imprimeFila(tFila *f, char *path) {
         printf("PRESSIONE QUALQUER TECLA PARA PARAR A EXECUÇÃO DA FILA\n\n");
     }
 
-    printf("PRESSIONE QUALQUER TECLA PARA VOLTAR PARA O MENU PRINCIPAL\n");
+    printf("PRESSIONE QUALQUER TECLA PARA VOLTAR PARA O MENU ANTERIOR\n");
     printf("############################################################\n");
 }

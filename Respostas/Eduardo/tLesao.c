@@ -31,7 +31,7 @@ tLesao * copiaLesao(tLesao * src) {
 return dest;
 }
 
-
+//Desaloca TODAS AS LESÕES!
 void desalocaLesao(tLesao ** lesoes, int qtdLesoes) {
 
     for(int i = 0; i < qtdLesoes; i++) {

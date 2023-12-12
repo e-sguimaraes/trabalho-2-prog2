@@ -15,6 +15,10 @@
 #define MES_ATUAL 11
 #define ANO_ATUAL 2023
 
+#define CAMINHO_BINARIO_LESOES "lesoes.bin"
+#define CAMINHO_BINARIO_USUARIOS "usuarios.bin"
+#define CAMINHO_BINARIO_PACIENTES "pacientes.bin"
+
 struct tSistema {
     tUsuario ** usuarios;
     tPaciente ** pacientes;
@@ -25,7 +29,7 @@ struct tSistema {
     tFila * fila;
 };
 
-
+//Cria o sistema dinamicamente e tenta recuperar arquivos binários caso existam;
 tSistema * criaSistema(char * binaryPath) {
 
     tSistema * sistema = (tSistema *) malloc(sizeof(tSistema));
@@ -40,13 +44,12 @@ tSistema * criaSistema(char * binaryPath) {
 
     //Lendo as lesões do arquivo binário;
     char binaryLesoes[1003];
-    sprintf(binaryLesoes, "%s/lesoes.bin", binaryPath);
+    sprintf(binaryLesoes, "%s/%s", binaryPath, CAMINHO_BINARIO_LESOES);
 
     FILE * bLesoes = NULL;
     bLesoes = fopen(binaryLesoes, "rb");
     if(bLesoes != NULL) {
         fread(&sistema -> qtdLesoes, sizeof(int), 1, bLesoes);
-        printf("%d\n", sistema -> qtdLesoes);
         sistema -> lesoes = (tLesao **) realloc(sistema -> lesoes, sistema -> qtdLesoes * sizeof(tLesao *));
 
         for(int i = 0; i < sistema -> qtdLesoes; i++) {
@@ -61,7 +64,7 @@ tSistema * criaSistema(char * binaryPath) {
 
     //Lendo os pacientes do arquivo binário;
     char binaryPacientes[1003];
-    sprintf(binaryPacientes, "%s/pacientes.bin", binaryPath);
+    sprintf(binaryPacientes, "%s/%s", binaryPath, CAMINHO_BINARIO_PACIENTES);
 
     FILE * bPacientes = NULL;
     bPacientes = fopen(binaryPacientes, "rb");
@@ -81,7 +84,7 @@ tSistema * criaSistema(char * binaryPath) {
 
     //Lendo os usuários do arquivo binário;
     char binaryUsuarios[1003];
-    sprintf(binaryUsuarios, "%s/usuarios.bin", binaryPath);
+    sprintf(binaryUsuarios, "%s/%s", binaryPath, CAMINHO_BINARIO_USUARIOS);
 
     FILE * bUsuarios = NULL;
     bUsuarios = fopen(binaryUsuarios, "rb");
@@ -102,6 +105,7 @@ tSistema * criaSistema(char * binaryPath) {
     
 return sistema;
 }
+
 
 void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, char * crm, int nivelUser) {
 
@@ -157,7 +161,6 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
             case 1:
 
                 adicionaLesaoPaciente(paciente);
-
                 break;
 
             case 2:
@@ -395,6 +398,7 @@ void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
 
 }
 
+
 void executaConsulta(tSistema * sistema, tUsuario * usuario) {
 
     printf("#################### CONSULTA MEDICA #######################\n");
@@ -462,6 +466,7 @@ void buscaPacienteSistema(tSistema * sistema) {
             printf("############################################################\n");
         }
         else {
+            desalocaListaBusca(lista);
             return;
         }
     }
@@ -531,19 +536,29 @@ void relatorioGeralSistema(tSistema * sistema) {
 
         scanf("%*c");
     }
+    else {
+        desalocaRelatorio(relatorio);
+    }
 
 }
 
 void executaFilaDeImpressao(tSistema * sistema, char * path) {
-    printf("################### FILA DE IMPRESSAO MEDICA #####################\n");
-    printf("ESCOLHA UMA OPCAO: \n");
-    printf("\t(1) EXECUTAR FILA DE IMPRESSAO\n");
-    printf("\t(2) RETORNAR AO MENU ANTERIOR\n");
-    printf("############################################################\n");
-    
+
     int opcao = 0;
-    scanf("%d%*c", &opcao);
-    if(opcao == 1) imprimeFila(sistema -> fila, path);
+
+    while(opcao != 2) {
+        printf("################### FILA DE IMPRESSAO MEDICA #####################\n");
+        printf("ESCOLHA UMA OPCAO: \n");
+        printf("\t(1) EXECUTAR FILA DE IMPRESSAO\n");
+        printf("\t(2) RETORNAR AO MENU ANTERIOR\n");
+        printf("############################################################\n");
+        
+        scanf("%d%*c", &opcao);
+        if(opcao == 1) {
+            imprimeFila(sistema -> fila, path);
+            scanf("%*c");
+        }
+    }
 
 }
 
@@ -609,17 +624,19 @@ tUsuario * fazLogin(tSistema * sistema) {
     char senha[20];
 
     while(1) {
+        printf("USUARIO: ");
         scanf("%s%*c", nome);
+        printf("SENHA: ");
         scanf("%s%*c", senha);
 
         for(int i = 0; i < sistema -> qtdUsuarios; i++) {
             if(!strcmp(nome, ObtemNomeUser(sistema -> usuarios[i])) && !strcmp(senha, ObtemSenhaUser(sistema -> usuarios[i]))) {
-                printf("USUARIO LOGADO COM SUCESSO\n");
+                printf("\nUSUARIO LOGADO COM SUCESSO\n");
                 return sistema -> usuarios[i];
             }
         }
 
-        printf("USUÁRIO OU SENHA INCORRETA\n");
+        printf("USUARIO OU SENHA INCORRETA\n");
     }
 }
 
