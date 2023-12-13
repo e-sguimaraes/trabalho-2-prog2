@@ -23,7 +23,7 @@ int ObtemTamanhoLesao(tLesao * lesao);
 
 /**
  * Função que recebe um ponteiro de ponteiro para lesões, bem como sua quantidade e
- * desaloca TODAS as lesões 
+ * desaloca TODAS as lesões
  */
 void desalocaLesao(tLesao ** lesoes, int qtdLesoes);
 

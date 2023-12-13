@@ -18,7 +18,7 @@ int main(int argc, char * argv[]) {
     sprintf(diretorioGeral, "%s/saida", argv[1]);
     sprintf(newBinaryPath, "%s/%s", argv[1], binaryPath);
 
-    tSistema * sistema = criaSistema(newBinaryPath);
+    tSistema * sistema = criaSistema(diretorioGeral, newBinaryPath);
     int opcao = 0;
 
     tUsuario * logado = fazLogin(sistema);

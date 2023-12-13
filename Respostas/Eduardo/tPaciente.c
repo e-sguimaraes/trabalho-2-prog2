@@ -158,6 +158,7 @@ int ObtemQtdLesoesCrioterapia(tPaciente * paciente) {
 return cont;  
 }
 
+
 tLesao ** ObtemLesoesPaciente(tPaciente * paciente) {
 return paciente -> lesoes;
 }
@@ -195,10 +196,12 @@ void imprimeEmArquivoPaciente(tPaciente * paciente, FILE * arqPaciente) {
 
 }
 
+
 void salvaBinarioPaciente(tPaciente * paciente, FILE * bPaciente) {
     fwrite(paciente, sizeof(tPaciente), 1, bPaciente);
 
 }
+
 
 tPaciente * recuperaPaciente(FILE * bPaciente) {
     
@@ -213,9 +216,11 @@ tPaciente * recuperaPaciente(FILE * bPaciente) {
 return paciente;
 }
 
+
 void foiAtendidoPaciente(tPaciente * paciente) {
     paciente -> jaFoiAtendido = 1;
 }
+
 
 int ObtemAtendidoPaciente(tPaciente * paciente) {
 return paciente -> jaFoiAtendido;

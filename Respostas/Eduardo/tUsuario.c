@@ -88,9 +88,11 @@ void desalocaUsuario(tUsuario * usuario) {
     free(usuario);
 }
 
+
 void salvaBinarioUsuario(tUsuario * usuario, FILE * bUsuario) {
     fwrite(usuario, sizeof(tUsuario), 1, bUsuario);
 }
+
 
 tUsuario * recuperaUsuario(FILE * bUsuario) {
     

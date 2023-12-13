@@ -10,6 +10,7 @@
 #include "tBiopsia.h"
 #include "tEncaminhamento.h"
 #include "tListaBusca.h"
+#include "tConsulta.h"
 
 #define DIA_ATUAL 9
 #define MES_ATUAL 11
@@ -18,19 +19,22 @@
 #define CAMINHO_BINARIO_LESOES "lesoes.bin"
 #define CAMINHO_BINARIO_USUARIOS "usuarios.bin"
 #define CAMINHO_BINARIO_PACIENTES "pacientes.bin"
+#define CAMINHO_BINARO_CONSULTAS "consultas.bin"
 
 struct tSistema {
     tUsuario ** usuarios;
     tPaciente ** pacientes;
     tLesao ** lesoes;
+    tConsulta ** consultas;
     int qtdUsuarios;
     int qtdPacientes;
     int qtdLesoes;
+    int qtdConsultas;
     tFila * fila;
 };
 
 //Cria o sistema dinamicamente e tenta recuperar arquivos binários caso existam;
-tSistema * criaSistema(char * binaryPath) {
+tSistema * criaSistema(char * path, char * binaryPath) {
 
     tSistema * sistema = (tSistema *) malloc(sizeof(tSistema));
 
@@ -39,8 +43,30 @@ tSistema * criaSistema(char * binaryPath) {
     sistema -> pacientes = (tPaciente **) calloc(1, sizeof(tPaciente *));
 
     sistema -> lesoes = (tLesao **) calloc(1, sizeof(tLesao *));
+    
+    sistema -> consultas = (tConsulta **) calloc(1, sizeof(tConsulta *));
 
     sistema -> fila = criaFila();
+
+    //Lendo as consultas do arquivo binário (???);
+    char binaryConsultas[1003];
+    sprintf(binaryConsultas, "%s/%s", binaryPath, CAMINHO_BINARO_CONSULTAS);
+
+    FILE * bConsultas = NULL;
+    bConsultas = fopen(binaryConsultas, "rb");
+    if(bConsultas != NULL) {
+        fread(&sistema -> qtdConsultas, sizeof(int), 1, bConsultas);
+        sistema -> consultas = (tConsulta **) realloc(sistema -> consultas, sistema -> qtdConsultas * sizeof(tConsulta *));
+
+        for(int i = 0; i < sistema -> qtdConsultas; i++) {
+            sistema -> consultas[i] = recuperaConsulta(bConsultas);
+        }
+
+        fclose(bConsultas);
+    }
+    else {
+            sistema -> qtdConsultas = 0;
+    }
 
     //Lendo as lesões do arquivo binário;
     char binaryLesoes[1003];
@@ -102,12 +128,37 @@ tSistema * criaSistema(char * binaryPath) {
             sistema -> qtdUsuarios = 0;
             adicionaPessoaSistema(sistema, 2); 
     }
-    
+
+    char diretorioDaBiopsia[1000];
+    sprintf(diretorioDaBiopsia, "%s/%s", path, NOME_ARQUIVO_BIOPSIA);
+    FILE * arqBiopsia = fopen(diretorioDaBiopsia, "a");
+    fclose(arqBiopsia);
+
+    char diretorioDoEncaminhamento[1000];
+    sprintf(diretorioDoEncaminhamento, "%s/%s", path, NOME_ARQUIVO_ENCAMINHAMENTO);
+    FILE * arqEncaminhamento = fopen(diretorioDoEncaminhamento, "a");
+    fclose(arqEncaminhamento);
+
+    char diretorioListaBusca[1000];
+    sprintf(diretorioListaBusca, "%s/%s", path, NOME_ARQUIVO_LISTA_BUSCA);
+    FILE * arqListaBusca = fopen(diretorioListaBusca, "a");
+    fclose(arqListaBusca);
+
+    char diretorioReceita[1000];
+    sprintf(diretorioReceita, "%s/%s", path, NOME_ARQUIVO_RECEITA);
+    FILE * arqReceita = fopen(diretorioReceita, "a");
+    fclose(arqReceita);
+   
+    char diretorioRelatorio[1000];
+    sprintf(diretorioRelatorio, "%s/%s", path, NOME_ARQUIVO_RELATORIO);
+    FILE * arqRelatorio = fopen(diretorioRelatorio, "a");
+    fclose(arqRelatorio);
+
 return sistema;
 }
 
 
-void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, char * crm, int nivelUser) {
+tConsulta * consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, char * crm, int nivelUser) {
 
     printf("---\n");
     printf("- NOME: %s\n", ObtemNomePaciente(paciente));
@@ -257,9 +308,13 @@ void consultaPaciente(tFila * fila, tPaciente * paciente, char * nomeUsuario, ch
         }
     }
 
+    tConsulta * consulta = criaConsulta(ObtemCPFPaciente(paciente), crm, dataConsulta, diabetes, 
+                                        fumante, alergia, historicoDeCancer, ObtemQuantidadeLesoesPaciente(paciente));
     foiAtendidoPaciente(paciente);
     
+return consulta;
 }
+
 
 void adicionaPessoaSistema(tSistema * sistema, int nivelUser) {
 
@@ -407,10 +462,15 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
     char cpfConsultado[TAM_CPF];
     int cpfEncontrado = 0;
     scanf("%s%*c", cpfConsultado);
+
+    tConsulta * consulta = NULL;
     
     for(int i = 0; i < sistema -> qtdPacientes; i++) {
         if(!strcmp(cpfConsultado, ObtemCPFPaciente(sistema -> pacientes[i]))) {
-            consultaPaciente(sistema -> fila, sistema -> pacientes[i], ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), ObtemNivelUser(usuario));
+            consulta = consultaPaciente(sistema -> fila, sistema -> pacientes[i], ObtemNomeUsuario(usuario), ObtemCRMUsuario(usuario), ObtemNivelUser(usuario));
+            sistema -> qtdConsultas++;
+            if(sistema -> qtdConsultas > 1) sistema -> consultas = (tConsulta **) realloc(sistema -> consultas, sistema -> qtdConsultas * sizeof(tConsulta *));
+            sistema -> consultas[(sistema -> qtdConsultas) - 1] = consulta;
             cpfEncontrado = 1;
         }
     }
@@ -422,6 +482,7 @@ void executaConsulta(tSistema * sistema, tUsuario * usuario) {
 
 
 }
+
 
 void buscaPacienteSistema(tSistema * sistema) {
 
@@ -542,6 +603,7 @@ void relatorioGeralSistema(tSistema * sistema) {
 
 }
 
+
 void executaFilaDeImpressao(tSistema * sistema, char * path) {
 
     int opcao = 0;
@@ -565,8 +627,23 @@ void executaFilaDeImpressao(tSistema * sistema, char * path) {
 
 void finalizaSistema(tSistema * sistema, char * binaryPath) {
 
-    char binaryPacientes[1002], binaryUsuarios[1002], binaryLesoes[1002];
+    char binaryPacientes[1002], binaryUsuarios[1002], binaryLesoes[1002], binaryConsultas[1002];
 
+    //Criando arquivos binários das consultas;
+    sprintf(binaryConsultas, "%s/consultas.bin", binaryPath);
+    FILE * bConsultas = NULL;
+    bConsultas = fopen(binaryConsultas, "wb");
+
+    fwrite(&sistema -> qtdConsultas, sizeof(int), 1, bConsultas);
+
+    for(int i = 0; i < sistema -> qtdConsultas; i++) {
+        salvaBinarioConsulta(sistema -> consultas[i], bConsultas);
+        desalocaConsulta(sistema -> consultas[i]);
+    }
+    fclose(bConsultas);
+    free(sistema -> consultas);
+
+    //Criando arquivos binários das lesões;
     sprintf(binaryLesoes, "%s/lesoes.bin", binaryPath);
     FILE * bLesoes = NULL;
     bLesoes = fopen(binaryLesoes, "wb");
@@ -587,6 +664,7 @@ void finalizaSistema(tSistema * sistema, char * binaryPath) {
 
     fclose(bLesoes);
 
+    //Criando arquivos binários de usuários;
     sprintf(binaryUsuarios, "%s/usuarios.bin", binaryPath);
     FILE * bUsuarios = NULL;
     bUsuarios = fopen(binaryUsuarios, "wb");
@@ -600,6 +678,7 @@ void finalizaSistema(tSistema * sistema, char * binaryPath) {
     fclose(bUsuarios);
     free(sistema -> usuarios);
 
+    //Criando arquivos binários de pacientes;
     sprintf(binaryPacientes, "%s/pacientes.bin", binaryPath);
     FILE * bPacientes = NULL;
     bPacientes = fopen(binaryPacientes, "wb");
@@ -617,6 +696,7 @@ void finalizaSistema(tSistema * sistema, char * binaryPath) {
 
     free(sistema);
 }
+
 
 tUsuario * fazLogin(tSistema * sistema) {
 

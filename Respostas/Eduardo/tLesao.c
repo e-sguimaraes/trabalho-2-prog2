@@ -41,7 +41,7 @@ void desalocaLesao(tLesao ** lesoes, int qtdLesoes) {
 
 }
 
-
+//Essa função DESTRÓI o ponteiro original recebido e retorna um novo;
 tLesao ** copiaLesoes(tLesao ** lesoes, tLesao * lesaoNova, int qtdLesoes) {
     
     tLesao ** lesoesNova = (tLesao **) malloc(qtdLesoes * sizeof(tLesao *));
@@ -87,13 +87,16 @@ tLesao ** adicionaLesao(tLesao ** lesoes, int qtdLesoes) {
 return copiaLesoes(lesoes, lesao, qtdLesoes);
 }
 
+
 int NecessitaCirurgiaLesao(tLesao * lesao) {
 return lesao -> necessitaCirurgia;
 }
 
+
 int NecessitaCrioterapiaLesao(tLesao * lesao) {
 return lesao -> necessitaCrioterapia;
 }
+
 
 int ObtemTamanhoLesao(tLesao * lesao) {
 return lesao -> tamanho;
@@ -119,15 +122,18 @@ void imprimeEmArquivoLesao(tLesao ** lesoes, int qtdLesoes, FILE * arqLesao) {
 
 }
 
+
 void salvaBinarioLesoes(tLesao ** lesoes, int qtdLesoes, FILE * binaryLesao) {
     for(int i = 0; i < qtdLesoes; i++) {
         fwrite(lesoes[i], sizeof(tLesao), 1, binaryLesao);
     }
 }
 
+
 void salvaBinarioLesao(tLesao * lesao, FILE * binaryLesao) {
     fwrite(lesao, sizeof(tLesao), 1, binaryLesao);
 }
+
 
 tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes) {
 
@@ -141,6 +147,7 @@ tLesao ** recuperaLesoes(FILE * binaryLesao, int qtdLesoes) {
 
 return lesoes;
 }
+
 
 tLesao * recuperaLesao(FILE * binaryLesao) {
     

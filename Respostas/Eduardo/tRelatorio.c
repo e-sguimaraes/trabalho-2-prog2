@@ -11,6 +11,7 @@ struct tRelatorio {
     int nLesoes, cirurgiaLesoes, crioterapiaLesoes;
 };
 
+
 tRelatorio * criaRelatorio(int totalAtendidos, int idadeMedia, int f, int m, int o, int tamMedioLesoes,
                            int nLesoes, int cirurgiaLesoes, int crioterapiaLesoes) {
 
@@ -28,6 +29,7 @@ tRelatorio * criaRelatorio(int totalAtendidos, int idadeMedia, int f, int m, int
 
 return relatorio;
 }
+
 
 void imprimeNaTelaRelatorio(void *dado) {
 
@@ -49,6 +51,7 @@ void imprimeNaTelaRelatorio(void *dado) {
     printf("############################################################\n");
 
 }
+
 
 void imprimeEmArquivoRelatorio(void *dado, char *path) {
 
@@ -73,6 +76,7 @@ void imprimeEmArquivoRelatorio(void *dado, char *path) {
     fclose(arqRelatorio);
 
 }
+
 
 void desalocaRelatorio(void * dado) {
     free((tRelatorio *)dado);

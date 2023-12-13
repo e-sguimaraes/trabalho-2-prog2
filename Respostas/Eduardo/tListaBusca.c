@@ -20,6 +20,7 @@ tListaBusca * criaListaBusca(tPaciente ** pacientes, int qtdPacientes, char * no
 return lista;
 }
 
+
 void imprimeNaTelaListaBusca(void *dado) {
 
     tListaBusca * lista = (tListaBusca *)dado;
@@ -34,6 +35,7 @@ void imprimeNaTelaListaBusca(void *dado) {
     }
 
 }
+
 
 void imprimeEmArquivoListaBusca(void *dado, char *path) {
 
@@ -58,6 +60,7 @@ void imprimeEmArquivoListaBusca(void *dado, char *path) {
     fclose(arqListaBusca);
 
 }
+
 
 void desalocaListaBusca(void * dado) {
     free((tListaBusca *)dado);
